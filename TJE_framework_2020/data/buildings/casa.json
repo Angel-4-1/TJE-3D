@@ -1,0 +1,821 @@
+{
+ "name": "session",
+ "camera": [
+  [
+   5.439419746398926,
+   2.1224589347839355,
+   -0.02726954221725464
+  ],
+  [
+   -1.430044174194336,
+   0.35195326805114746,
+   0.26926112174987793
+  ]
+ ],
+ "scene": {
+  "ref": 0,
+  "layers": 3,
+  "flags": {
+   "visible": true,
+   "collides": true,
+   "no_transform": true
+  },
+  "children": [
+   {
+    "position": [
+     1.0000653266906738,
+     0,
+     -0.009739875793457031
+    ],
+    "rotation": [
+     0,
+     1,
+     0,
+     -5.150021520350379e-10
+    ],
+    "id": "node453968.94500008784::0.8294379208495819",
+    "ref": 1,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 2,
+      "mesh": "data/meshes/spaceship/object_004.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 3,
+      "mesh": "data/meshes/spaceship/object_004.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     1.0012015104293823,
+     0,
+     0.9879872798919678
+    ],
+    "rotation": [
+     0,
+     1,
+     0,
+     -5.150021520350379e-10
+    ],
+    "id": "node491013.4550000075::0.003513566682641134",
+    "ref": 4,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 5,
+      "mesh": "data/meshes/spaceship/object_006.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 6,
+      "mesh": "data/meshes/spaceship/object_006.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     0.18634551763534546,
+     0,
+     1.7976112365722656
+    ],
+    "rotation": [
+     0,
+     0.7071067690849304,
+     0,
+     0.7071067690849304
+    ],
+    "id": "node520783.11499999836::0.21760521969710145",
+    "ref": 7,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 8,
+      "mesh": "data/meshes/spaceship/object_002.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 9,
+      "mesh": "data/meshes/spaceship/object_002.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     -0.8124179244041443,
+     0,
+     1.7992351055145264
+    ],
+    "rotation": [
+     0,
+     0.7071067690849304,
+     0,
+     0.7071067690849304
+    ],
+    "id": "node576641.5100001032::0.8560720591142994",
+    "ref": 10,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 11,
+      "mesh": "data/meshes/spaceship/object.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 12,
+      "mesh": "data/meshes/spaceship/object.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     -0.7979072332382202,
+     0,
+     -1.8116130828857422
+    ],
+    "rotation": [
+     0,
+     0.7071067690849304,
+     0,
+     -0.7071067690849304
+    ],
+    "id": "node632478.7400000496::0.9487016342120167",
+    "ref": 13,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 14,
+      "mesh": "data/meshes/spaceship/object_002.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 15,
+      "mesh": "data/meshes/spaceship/object_002.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     -1.6123931407928467,
+     0,
+     0.9849580526351929
+    ],
+    "id": "node632633.7700000731::0.8967967985335628",
+    "ref": 16,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 17,
+      "mesh": "data/meshes/spaceship/object_002.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 18,
+      "mesh": "data/meshes/spaceship/object_002.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     -1.612830400466919,
+     0,
+     0
+    ],
+    "id": "node699759.4550000504::0.8759926515838559",
+    "ref": 19,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 20,
+      "mesh": "data/meshes/spaceship/object_001.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 21,
+      "mesh": "data/meshes/spaceship/object_001.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     -1.6122465133666992,
+     0,
+     -0.9979667067527771
+    ],
+    "id": "node720010.8050000854::0.6126501319097546",
+    "ref": 22,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 23,
+      "mesh": "data/meshes/spaceship/object.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 24,
+      "mesh": "data/meshes/spaceship/object.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     1.0007201433181763,
+     0,
+     -1.0014564990997314
+    ],
+    "rotation": [
+     0,
+     1,
+     0,
+     -5.150021520350379e-10
+    ],
+    "id": "node788464.4500000868::0.04223718059369208",
+    "ref": 25,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 26,
+      "mesh": "data/meshes/spaceship/object_002.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 27,
+      "mesh": "data/meshes/spaceship/object_002.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     0.199013352394104,
+     0,
+     -1.8140026330947876
+    ],
+    "rotation": [
+     0,
+     0.7071067690849304,
+     0,
+     -0.7071067690849304
+    ],
+    "id": "node800792.7500000224::0.460127817372332",
+    "ref": 28,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 29,
+      "mesh": "data/meshes/spaceship/object.obj",
+      "submesh": 0,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 30,
+      "mesh": "data/meshes/spaceship/object.obj",
+      "submesh": 1,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     1.061150074005127,
+     0.929551362991333,
+     -1.8698617219924927
+    ],
+    "scaling": [
+     2.802856206893921,
+     1.1298623085021973,
+     3.7908308506011963
+    ],
+    "id": "node1062144.2450000905::0.2159339920824328",
+    "ref": 31,
+    "mesh": "data/meshes/spaceship/object_013.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.6525192260742188,
+     0,
+     -0.20348504185676575
+    ],
+    "id": "node1185108.9600000996::0.6264365462469259",
+    "ref": 32,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.6527252197265625,
+     0,
+     -0.8779294490814209
+    ],
+    "id": "node1191903.0200000852::0.00523800696528931",
+    "ref": 33,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.779024362564087,
+     0.8374816179275513,
+     0.010683119297027588
+    ],
+    "rotation": [
+     0,
+     1,
+     0,
+     -5.150021520350379e-10
+    ],
+    "scaling": [
+     0.5389318466186523,
+     1,
+     1
+    ],
+    "id": "node1261603.7500000093::0.9790910006623521",
+    "ref": 34,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 35,
+      "mesh": "data/meshes/spaceship/object_016.obj",
+      "submesh": 0,
+      "color": [
+       0.5607842803001404,
+       0.5686274766921997,
+       0.6000000238418579,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 36,
+      "mesh": "data/meshes/spaceship/object_016.obj",
+      "submesh": 1,
+      "color": [
+       0.8235294222831726,
+       0.8470587730407715,
+       0.9215685725212097,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "editor": {
+  "group": false,
+  "targets": null
+ }
+}
