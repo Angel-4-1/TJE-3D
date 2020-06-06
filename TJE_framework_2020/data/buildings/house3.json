@@ -1,0 +1,1153 @@
+{
+ "name": "house3",
+ "camera": [
+  [
+   3.98933482170105,
+   1.552445411682129,
+   0.6241607666015625
+  ],
+  [
+   0.8924528956413269,
+   0.023472726345062256,
+   -0.2804839611053467
+  ]
+ ],
+ "scene": {
+  "ref": 0,
+  "layers": 3,
+  "flags": {
+   "visible": true,
+   "collides": true,
+   "no_transform": true
+  },
+  "children": [
+   {
+    "position": [
+     -0.9793598055839539,
+     0,
+     0.9927544593811035
+    ],
+    "rotation": [
+     0,
+     1,
+     0,
+     -5.150021520350379e-10
+    ],
+    "scaling": [
+     1.9424374103546143,
+     1.9424374103546143,
+     1.9424374103546143
+    ],
+    "id": "node136112.50499999733::0.6487770086662357",
+    "ref": 1,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     0.9962700605392456,
+     0,
+     -0.9940372705459595
+    ],
+    "scaling": [
+     1,
+     1,
+     1.583154559135437
+    ],
+    "id": "node342361.4149999994::0.08135913001238415",
+    "ref": 2,
+    "color": [
+     0.3899609446525574,
+     0.4372509717941284,
+     0.46562498807907104,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       1.7650947370384529e-9
+      ],
+      "scaling": [
+       1,
+       1,
+       1.2539442777633667
+      ],
+      "ref": 3,
+      "mesh": "data/meshes/buildings/building_043.obj",
+      "submesh": 0,
+      "color": [
+       0.3899609446525574,
+       0.4372509717941284,
+       0.46562498807907104,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "id": "node371127.79500000033::0.16597944194550873",
+    "ref": 4,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0.9955744743347168,
+       0.6250737905502319,
+       -0.9936524629592896
+      ],
+      "scaling": [
+       1,
+       1,
+       1.984788417816162
+      ],
+      "ref": 5,
+      "mesh": "data/meshes/buildings/building_043.obj",
+      "submesh": 0,
+      "color": [
+       0.3899609446525574,
+       0.4372509717941284,
+       0.46562498807907104,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     1.5418016910552979,
+     0,
+     -0.9919389486312866
+    ],
+    "scaling": [
+     0.5640260577201843,
+     0.4159422814846039,
+     1.9813873767852783
+    ],
+    "id": "node497161.7199999964::0.1527883676393722",
+    "ref": 6,
+    "mesh": "data/meshes/buildings/building_015.obj",
+    "color": [
+     0.8656250238418579,
+     0.6383984088897705,
+     0.29755860567092896,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.505562663078308,
+     0.5733039975166321,
+     -0.9487301111221313
+    ],
+    "scaling": [
+     0.562574565410614,
+     0.37414610385894775,
+     1.8973828554153442
+    ],
+    "id": "node572727.9049999998::0.7549518729303164",
+    "ref": 7,
+    "mesh": "data/meshes/buildings/building_015.obj",
+    "color": [
+     0.8656250238418579,
+     0.6383984088897705,
+     0.29755860567092896,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.4587548971176147,
+     0.0139845609664917,
+     0.8865290880203247
+    ],
+    "scaling": [
+     0.5689601302146912,
+     0.6518149971961975,
+     0.5689601302146912
+    ],
+    "id": "node923103.5449999981::0.7275150480987307",
+    "ref": 8,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.431803584098816,
+     0,
+     -0.9317200183868408
+    ],
+    "scaling": [
+     0.6423497200012207,
+     0.6854617595672607,
+     0.6423497200012207
+    ],
+    "id": "node953790.3000000005::0.2002053779378914",
+    "ref": 9,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.4682302474975586,
+     0,
+     0.25305086374282837
+    ],
+    "scaling": [
+     0.547038733959198,
+     0.6597924828529358,
+     0.547038733959198
+    ],
+    "id": "node987891.5199999975::0.7547874787255884",
+    "ref": 10,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.4585082530975342,
+     0.0181744247674942,
+     -0.23258084058761597
+    ],
+    "rotation": [
+     -0.004323734901845455,
+     -0.006596148945391178,
+     -0.008427239023149014,
+     0.9999333620071411
+    ],
+    "scaling": [
+     0.5059925317764282,
+     0.6508041024208069,
+     0.505992591381073
+    ],
+    "id": "node1021976.4349999968::0.9528498656962459",
+    "ref": 11,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     0,
+     0,
+     0
+    ],
+    "scaling": [
+     0.10000000149011612,
+     0.10000000149011612,
+     0.10000000149011612
+    ],
+    "id": "node1324871.1550000007::0.7464451937407492",
+    "ref": 12,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.4765279293060303,
+     0.7895663380622864,
+     0.023094847798347473
+    ],
+    "scaling": [
+     0.020255371928215027,
+     0.02623921073973179,
+     1.7902618646621704
+    ],
+    "id": "node1347264.9999999995::0.7955200434494529",
+    "ref": 13,
+    "mesh": "data/meshes/primitives/cube.obj",
+    "color": [
+     0.7437499761581421,
+     0.370480477809906,
+     0.06507812440395355,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.2187613248825073,
+     0.7895364761352539,
+     0.9090908765792847
+    ],
+    "rotation": [
+     0,
+     0.7071067690849304,
+     0,
+     0.7071068286895752
+    ],
+    "scaling": [
+     0.018454067409038544,
+     0.026090577244758606,
+     0.5265603065490723
+    ],
+    "id": "node1425297.679999996::0.9948127927745676",
+    "ref": 14,
+    "mesh": "data/meshes/primitives/cube.obj",
+    "color": [
+     0.7437499761581421,
+     0.370480477809906,
+     0.06507812440395355,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.2397581338882446,
+     0.7889208793640137,
+     -0.8763501048088074
+    ],
+    "scaling": [
+     0.4935005307197571,
+     0.026378178969025612,
+     0.02121790312230587
+    ],
+    "id": "node1545510.3499999968::0.2938108243624378",
+    "ref": 15,
+    "mesh": "data/meshes/primitives/cube.obj",
+    "color": [
+     0.7437499761581421,
+     0.370480477809906,
+     0.06507812440395355,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.4806288480758667,
+     0.5981695055961609,
+     0.8884608745574951
+    ],
+    "scaling": [
+     0.26681578159332275,
+     0.22768720984458923,
+     0.26681578159332275
+    ],
+    "id": "node1739291.194999998::0.40808140964336714",
+    "ref": 16,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "color": [
+     0.7437499761581421,
+     0.370480477809906,
+     0.06507812440395355,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.482668399810791,
+     0.6068317890167236,
+     -0.885718822479248
+    ],
+    "scaling": [
+     0.20672430098056793,
+     0.20672430098056793,
+     0.20672430098056793
+    ],
+    "id": "node1802813.589999998::0.573545262692615",
+    "ref": 17,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "color": [
+     0.7437499761581421,
+     0.370480477809906,
+     0.06507812440395355,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.484723687171936,
+     0.5977306365966797,
+     -0.3288533091545105
+    ],
+    "rotation": [
+     0,
+     -0.009919819422066212,
+     0,
+     0.9999508261680603
+    ],
+    "scaling": [
+     0.3026806712150574,
+     0.2180936336517334,
+     0.2346450537443161
+    ],
+    "id": "node1859437.7249999961::0.9337796802418652",
+    "ref": 18,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "color": [
+     0.7437499761581421,
+     0.370480477809906,
+     0.06507812440395355,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.4857200384140015,
+     0.5917219519615173,
+     0.3492666184902191
+    ],
+    "scaling": [
+     0.21212932467460632,
+     0.2308858036994934,
+     0.21212932467460632
+    ],
+    "id": "node1893872.2149999957::0.2449529311883185",
+    "ref": 19,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "color": [
+     0.7437499761581421,
+     0.370480477809906,
+     0.06507812440395355,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.2735133171081543,
+     0.6054173707962036,
+     -0.8809915781021118
+    ],
+    "rotation": [
+     -0.010444486513733864,
+     -0.008786721155047417,
+     0.0003122336929664016,
+     0.9999067783355713
+    ],
+    "scaling": [
+     0.3941062092781067,
+     0.21229995787143707,
+     0.2419154793024063
+    ],
+    "id": "node1909748.6849999987::0.6272030403653972",
+    "ref": 20,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "color": [
+     0.7437499761581421,
+     0.370480477809906,
+     0.06507812440395355,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.2380272150039673,
+     0.6087425947189331,
+     0.8913698196411133
+    ],
+    "rotation": [
+     0.006100829690694809,
+     0.0039037163369357586,
+     0.0032091441098600626,
+     0.9999686479568481
+    ],
+    "scaling": [
+     0.16805149614810944,
+     0.20399203896522522,
+     0.2627807855606079
+    ],
+    "id": "node2075693.879999999::0.8773357266254684",
+    "ref": 21,
+    "mesh": "data/meshes/spaceship/object_077.obj",
+    "color": [
+     0.7437499761581421,
+     0.370480477809906,
+     0.06507812440395355,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     0.9840192794799805,
+     0.056617528200149536,
+     0.40750277042388916
+    ],
+    "scaling": [
+     1,
+     1.1882115602493286,
+     1.3487179279327393
+    ],
+    "id": "node2369302.8049999992::0.7818082693707928",
+    "ref": 22,
+    "mesh": "data/meshes/buildings/detail_011.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     0.9495891332626343,
+     0.05459371209144592,
+     -0.8187940120697021
+    ],
+    "scaling": [
+     1,
+     1.2158753871917725,
+     1.295023798942566
+    ],
+    "id": "node2430367.435::0.7994272962206275",
+    "ref": 23,
+    "mesh": "data/meshes/buildings/detail_011.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     0.9806948900222778,
+     0.6715987324714661,
+     -0.8209784626960754
+    ],
+    "rotation": [
+     0,
+     0,
+     -0.0012495708651840687,
+     0.9999992251396179
+    ],
+    "scaling": [
+     1.0000015497207642,
+     1.219572901725769,
+     1.2899105548858643
+    ],
+    "id": "node2459837.7899999977::0.47021013352128316",
+    "ref": 24,
+    "mesh": "data/meshes/buildings/detail_011.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     0.986653208732605,
+     0.6828052401542664,
+     0.4178563952445984
+    ],
+    "scaling": [
+     1,
+     1.1305689811706543,
+     1.283995509147644
+    ],
+    "id": "node2487475.5549999974::0.47082766547454225",
+    "ref": 25,
+    "mesh": "data/meshes/buildings/detail_011.obj",
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     1.9059172868728638,
+     0,
+     0.4352850317955017
+    ],
+    "id": "node2551430.379999998::0.3247634543682325",
+    "ref": 26,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       -0.8980640172958374,
+       -1.1804052591323853,
+       -0.10153329372406006
+      ],
+      "rotation": [
+       0.0031171957962214947,
+       0.0016073950100690126,
+       -0.00021121534518897533,
+       0.9999938011169434
+      ],
+      "scaling": [
+       2.053873062133789,
+       5.092640399932861,
+       2.3291547298431396
+      ],
+      "ref": 27,
+      "mesh": "data/meshes/buildings/detail_004.obj",
+      "submesh": 1,
+      "color": [
+       0.949999988079071,
+       0.8523281216621399,
+       0.3918749988079071,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     1.8628489971160889,
+     0,
+     -1.2052589654922485
+    ],
+    "id": "node2682205.7649999987::0.19733613177650344",
+    "ref": 28,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       -0.9159170389175415,
+       -0.07052785158157349,
+       0.29216301441192627
+      ],
+      "scaling": [
+       1.0771673917770386,
+       2.609299898147583,
+       2.421543598175049
+      ],
+      "ref": 29,
+      "mesh": "data/meshes/buildings/detail_005.obj",
+      "submesh": 1,
+      "color": [
+       0.949999988079071,
+       0.8523281216621399,
+       0.3918749988079071,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     0.9353338479995728,
+     0.6076425313949585,
+     -0.2817833125591278
+    ],
+    "rotation": [
+     0.003900115145370364,
+     0.0009838450932875276,
+     0.0003524016065057367,
+     0.9999918341636658
+    ],
+    "scaling": [
+     1.0000075101852417,
+     1.0723706483840942,
+     2.218175172805786
+    ],
+    "id": "node2789270.8899999997::0.4205068706716728",
+    "ref": 30,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 31,
+      "mesh": "data/meshes/buildings/detail_004.obj",
+      "submesh": 0,
+      "color": [
+       0.8962264060974121,
+       0.6015712022781372,
+       0.39315590262413025,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 32,
+      "mesh": "data/meshes/buildings/detail_004.obj",
+      "submesh": 1,
+      "color": [
+       0.949999988079071,
+       0.8523281216621399,
+       0.3918749988079071,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     0,
+     0,
+     -0.02768513560295105
+    ],
+    "scaling": [
+     1.0614160299301147,
+     1.0614160299301147,
+     1.0614160299301147
+    ],
+    "id": "node2789483.9149999972::0.44451548574057154",
+    "ref": 33,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   },
+   {
+    "position": [
+     0.9007447957992554,
+     0,
+     -0.2615868151187897
+    ],
+    "rotation": [
+     0,
+     -0.7071067690849304,
+     0,
+     -0.7071067690849304
+    ],
+    "scaling": [
+     0.5431971549987793,
+     0.5210139751434326,
+     0.9800999164581299
+    ],
+    "id": "node3054107.7000000007::0.9238369833275872",
+    "ref": 34,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 35,
+      "mesh": "data/meshes/furniture/doorway.obj",
+      "submesh": 0,
+      "color": [
+       0.8962264060974121,
+       0.6015712022781372,
+       0.39315590262413025,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 36,
+      "mesh": "data/meshes/furniture/doorway.obj",
+      "submesh": 1,
+      "color": [
+       0.8962264060974121,
+       0.6015712022781372,
+       0.39315590262413025,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 37,
+      "mesh": "data/meshes/furniture/doorway.obj",
+      "submesh": 2,
+      "color": [
+       0.8962264060974121,
+       0.6015712022781372,
+       0.39315590262413025,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 38,
+      "mesh": "data/meshes/furniture/doorway.obj",
+      "submesh": 3,
+      "color": [
+       0.7406104803085327,
+       0.822866678237915,
+       0.8396226167678833,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     0.9837499856948853,
+     0.014164112508296967,
+     0.2925269305706024
+    ],
+    "rotation": [
+     0,
+     -0.7071067690849304,
+     0,
+     0.7071067690849304
+    ],
+    "scaling": [
+     0.598220705986023,
+     0.49008968472480774,
+     0.4681454598903656
+    ],
+    "id": "node3108857.1699999957::0.07795402708115207",
+    "ref": 39,
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    },
+    "children": [
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 40,
+      "mesh": "data/meshes/furniture/doorway.obj",
+      "submesh": 0,
+      "color": [
+       0.8962264060974121,
+       0.6015712022781372,
+       0.39315590262413025,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 41,
+      "mesh": "data/meshes/furniture/doorway.obj",
+      "submesh": 1,
+      "color": [
+       0.8962264060974121,
+       0.6015712022781372,
+       0.39315590262413025,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 42,
+      "mesh": "data/meshes/furniture/doorway.obj",
+      "submesh": 2,
+      "color": [
+       0.8962264060974121,
+       0.6015712022781372,
+       0.39315590262413025,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     },
+     {
+      "position": [
+       0,
+       0,
+       0
+      ],
+      "ref": 43,
+      "mesh": "data/meshes/furniture/doorway.obj",
+      "submesh": 3,
+      "color": [
+       0.7406104803085327,
+       0.822866678237915,
+       0.8396226167678833,
+       1
+      ],
+      "layers": 1,
+      "flags": {
+       "visible": true,
+       "collides": true,
+       "was_rendered": true
+      }
+     }
+    ]
+   },
+   {
+    "position": [
+     0.8515549898147583,
+     1.3872078657150269,
+     0.023065030574798584
+    ],
+    "scaling": [
+     0.08550826460123062,
+     0.40727028250694275,
+     1.4357526302337646
+    ],
+    "id": "node4894262.615000014::0.8746929934161736",
+    "ref": 44,
+    "mesh": "data/meshes/primitives/cube.obj",
+    "color": [
+     0.3899609446525574,
+     0.4372509717941284,
+     0.46562498807907104,
+     1
+    ],
+    "layers": 1,
+    "flags": {
+     "visible": true,
+     "collides": true,
+     "base_object": true,
+     "was_rendered": true
+    }
+   }
+  ]
+ },
+ "editor": {
+  "group": false,
+  "targets": [
+   7
+  ]
+ }
+}

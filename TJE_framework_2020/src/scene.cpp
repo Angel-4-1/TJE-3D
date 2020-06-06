@@ -13,3 +13,33 @@ Scene* Scene::getInstance()
 
 	return instance;
 }
+
+void Scene::updateAspas()
+{
+	for (int i = 0; i < MAX_ASPAS; i++) {
+		if (aspas[i] == NULL)
+			continue;
+
+		Matrix44* asp = aspas[i];
+		Vector3 pos = asp->getTranslation();
+		asp->rotate(5 * DEG2RAD, Vector3(1, 0, 0));
+	}
+}
+
+void Scene::initAspas()
+{
+	for (int i = 0; i < MAX_ASPAS; i++) {
+		aspas[i] = NULL;
+	}
+}
+
+void Scene::addAspas(Matrix44* aspaMatrix)
+{
+	for (int i = 0; i < MAX_ASPAS; i++) {
+		if (aspas[i] != NULL) {
+			continue;
+		}
+		aspas[i] = aspaMatrix;
+		break;
+	}
+}

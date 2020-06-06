@@ -6,7 +6,7 @@ attribute vec2 a_uv;
 attribute mat4 u_model;
 
 uniform vec3 u_camera_pos;
-uniform vec3 u_offset;
+//uniform vec3 u_offset;
 
 uniform mat4 u_viewprojection;
 
@@ -25,7 +25,7 @@ void main()
 	v_position = a_vertex;
 	v_world_position = (u_model * vec4( a_vertex, 1.0) ).xyz;
 
-	v_world_position += u_offset;
+	//v_world_position += u_offset;
 	
 	//store the texture coordinates
 	v_uv = a_uv;

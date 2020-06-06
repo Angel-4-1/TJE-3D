@@ -6,6 +6,7 @@ Uint8 Input::prev_keystate[SDL_NUM_SCANCODES]; //previous before
 //mouse state
 int Input::mouse_state; //tells which buttons are pressed
 Vector2 Input::mouse_position; //last mouse position
+Vector2 Input::last_click_position; //last click position
 Vector2 Input::mouse_delta; //mouse movement in the last frame
 float Input::mouse_wheel;
 float Input::mouse_wheel_delta;

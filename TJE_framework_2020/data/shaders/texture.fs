@@ -12,5 +12,8 @@ uniform float u_time;
 void main()
 {
 	vec2 uv = v_uv;
-	gl_FragColor = u_color * texture2D( u_texture, uv );
+	vec4 color = u_color * texture2D( u_texture, uv );
+	if(color.a <= 0.0)
+		discard;
+	gl_FragColor = color;
 }

@@ -2,33 +2,34 @@
 
 SkyBox::SkyBox() 
 {
-    skyShader = Shader::Get("data/shaders/sky.vs", "data/shaders/sky.fs");
-    //skyShader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-    //loadCubeMap(TEXTURE_FILES);
+    skyShader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+    
     texture = new Texture();
-    cube = Mesh::Get("data/box.ASE");
+    cube = Mesh::Get("data/sky/boxsky3.obj");
+}
 
-    img1 = new Image();
-    img1->loadTGA("data/sky/right.tga");
-    data_files[0] = img1->data;
+void SkyBox::render(Matrix44 viewprojection) {
+	//glDisable(GL_CULL_FACE);
+	int size = 512;
+	texture = Texture::Get("data/sky/skybox.png");
 
-    img2 = new Image();
-    img2->loadTGA("data/sky/left.tga");
-    data_files[1] = img2->data;
+	Camera* camera = Camera::current;
+	Matrix44 m;
+	m.setTranslation(camera->eye.x, camera->eye.y, camera->eye.z);
+	m.rotate(180 * DEG2RAD, Vector3(0, 0, 1));
+	skyShader->enable();
+	//draw skybox
 
-    img3 = new Image();
-    img3->loadTGA("data/sky/top.tga");
-    data_files[2] = img3->data;
+	skyShader->setUniform("u_color", Vector4(1, 1, 1, 1));
+	skyShader->setUniform("u_viewprojection", camera->viewprojection_matrix);
+	skyShader->setUniform("u_direction", camera->center);
+	skyShader->setUniform("u_position", camera->eye);
+	skyShader->setUniform("u_skybox", texture, 0);
+	skyShader->setUniform("u_model", m);
 
-    img4 = new Image();
-    img4->loadTGA("data/sky/bottom.tga");
-    data_files[3] = img4->data;
-
-    img5 = new Image();
-    img5->loadTGA("data/sky/back.tga");
-    data_files[4] = img5->data;
-
-    img6 = new Image();
-    img6->loadTGA("data/sky/front.tga");
-    data_files[5] = img6->data;
+	skyShader->setUniform("u_position", camera->eye);
+	skyShader->setUniform("u_direction", camera->center);
+	cube->render(GL_TRIANGLES);
+	skyShader->disable();
+	//glEnable(GL_CULL_FACE);
 }

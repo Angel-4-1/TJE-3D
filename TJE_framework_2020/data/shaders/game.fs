@@ -18,7 +18,7 @@ void main()
 
     vec4 color = u_color * texture2D( u_texture, uv );
 	
-    //normlaize vectors
+    //normalize vectors
     vec3 N = normalize(v_normal);
     vec3 L = normalize(u_light_direction);
     

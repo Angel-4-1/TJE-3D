@@ -34,10 +34,8 @@ public:
 
 	//main functions
 	void render( void );
-	void renderWorld(void);
-	void renderWithFBO(void);
 	void update( double dt );
-
+	void changeState();
 	//events
 	void onKeyDown( SDL_KeyboardEvent event );
 	void onKeyUp(SDL_KeyboardEvent event);

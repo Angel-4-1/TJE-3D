@@ -1,0 +1,34 @@
+/******INSTANCE*********/
+	Shader* shader_instanced = Shader::Get("data/shaders/instanced.vs", "data/shaders/texture.fs");
+
+	//enable shader
+	shader_instanced->enable();
+
+	//upload uniforms
+	shader_instanced->setUniform("u_color", Vector4(1, 1, 1, 1));
+	shader_instanced->setUniform("u_viewprojection", camera->viewprojection_matrix);
+	shader_instanced->setUniform("u_texture", gamemap->prototypes[(int)ORANGEGRASS].texture, 0);
+
+	shader_instanced->setUniform("u_camera_pos", camera->eye);
+	shader_instanced->setUniform("u_light_direction", Vector3(0.3, 0.6, 0.2).normalize());
+
+	Vector3 offset = camera->eye;
+	offset.y = 0.0;
+	offset.x = round(offset.x / 128.0f) + 128.0f;
+	offset.z = round(offset.z / 128.0f) + 128.0f;
+	//shader_instanced->setUniform("u_offset", Vector3(0, 0, 0));
+
+	//Vector3 pos = model_mat * mesh->box.center;
+	Mesh* mesh = gamemap->prototypes[(int)ORANGEGRASS].mesh;
+	shader_instanced->setUniform("u_offset", offset + Vector3(0, 0, 0));
+	mesh->renderInstanced(GL_TRIANGLES, &grass[0], grass.size());
+	shader_instanced->setUniform("u_offset", offset + Vector3(-128, 0, 0));
+	mesh->renderInstanced(GL_TRIANGLES, &grass[0], grass.size());
+	shader_instanced->setUniform("u_offset", offset + Vector3(0, 0, -128));
+	mesh->renderInstanced(GL_TRIANGLES, &grass[0], grass.size());
+	shader_instanced->setUniform("u_offset", offset + Vector3(-128, 0, -128));
+	mesh->renderInstanced(GL_TRIANGLES, &grass[0], grass.size());
+
+	//disable shader
+	shader_instanced->disable();
+	/***********************/

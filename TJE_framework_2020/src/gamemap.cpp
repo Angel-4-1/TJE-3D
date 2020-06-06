@@ -10,33 +10,66 @@ GameMap::GameMap()
 		prototypes[i].index = EMPTY;
 		prototypes[i].mesh = NULL;
 		prototypes[i].texture = NULL;
-		prototypes[i].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+		prototypes[i].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/phong.fs");
 	}
-
+	
 	prototypes[(int)PLAYER].index = PLAYER;
-	prototypes[(int)PLAYER].mesh = Mesh::Get("data/characters/characterFlipY.OBJ");
+	prototypes[(int)PLAYER].mesh = Mesh::Get("data/characters/animation/character3.mesh");
 	prototypes[(int)PLAYER].texture = Texture::Get("data/characters/survivorMale.tga");
+	prototypes[(int)PLAYER].shader = Shader::Get("data/shaders/skinning.vs", "data/shaders/phong.fs");
 
-	prototypes[(int)PLANE].index = PLANE;
-	prototypes[(int)PLANE].mesh = Mesh::Get("data/spitfire/spitfire.ASE");
-	prototypes[(int)PLANE].texture = Texture::Get("data/spitfire/spitfire_color_spec.tga");
+	prototypes[(int)CHARACTER].index = CHARACTER;
+	prototypes[(int)CHARACTER].mesh = Mesh::Get("data/characters/animation/character3.mesh");
+	prototypes[(int)CHARACTER].texture = Texture::Get("data/characters/zombie.tga");
+	prototypes[(int)CHARACTER].shader = Shader::Get("data/shaders/skinning.vs", "data/shaders/phong.fs");
 
-	prototypes[(int)TORPEDO].index = TORPEDO;
-	prototypes[(int)TORPEDO].mesh = Mesh::Get("data/bomb/torpedo.ASE");
-	prototypes[(int)TORPEDO].texture = Texture::Get("data/bomb/torpedo.tga");
-
-	prototypes[(int)BRIDGE].index = BRIDGE;
-	prototypes[(int)BRIDGE].mesh = Mesh::Get("data/bridge/bridge.OBJ");
-	prototypes[(int)BRIDGE].texture = Texture::Get("data/bridge/bridge.tga");
+	prototypes[(int)ENEMY].index = ENEMY;
+	prototypes[(int)ENEMY].mesh = Mesh::Get("data/characters/animation/character3.mesh");
+	prototypes[(int)ENEMY].texture = Texture::Get("data/characters/zombie.tga");
+	prototypes[(int)ENEMY].shader = Shader::Get("data/shaders/skinning.vs", "data/shaders/phong.fs");
 
 	prototypes[(int)HOUSE].index = HOUSE;
 	prototypes[(int)HOUSE].mesh = Mesh::Get("data/buildings/casa.OBJ");
 	prototypes[(int)HOUSE].texture = Texture::Get("data/buildings/casa.tga");
 
+	/*****NATURE*****/
 	prototypes[(int)TREE].index = TREE;
 	prototypes[(int)TREE].mesh = Mesh::Get("data/nature/tree/tree2.OBJ");
 	prototypes[(int)TREE].texture = Texture::Get("data/nature/tree/tree2.tga");
 
+	prototypes[(int)TREE3].index = TREE3;
+	prototypes[(int)TREE3].mesh = Mesh::Get("data/nature/tree/tree3.OBJ");
+	prototypes[(int)TREE3].texture = Texture::Get("data/nature/tree/tree3.tga");
+
+	prototypes[(int)TREE4].index = TREE4;
+	prototypes[(int)TREE4].mesh = Mesh::Get("data/nature/tree/treeorange.OBJ");
+	prototypes[(int)TREE4].texture = Texture::Get("data/nature/tree/treeorange.tga");
+
+	prototypes[(int)CACTUS].index = CACTUS;
+	prototypes[(int)CACTUS].mesh = Mesh::Get("data/buildings/cactus.OBJ");
+	prototypes[(int)CACTUS].texture = Texture::Get("data/buildings/cactus.tga");
+
+	prototypes[(int)ORANGEGRASS].index = ORANGEGRASS;
+	prototypes[(int)ORANGEGRASS].mesh = Mesh::Get("data/nature/grass/orangegrass.OBJ");
+	prototypes[(int)ORANGEGRASS].texture = Texture::Get("data/nature/grass/orangegrass.tga");
+
+	prototypes[(int)FIRE].index = FIRE;
+	prototypes[(int)FIRE].mesh = Mesh::Get("data/nature/rocks/fire.OBJ");
+	prototypes[(int)FIRE].texture = Texture::Get("data/nature/rocks/fire.tga");
+
+	prototypes[(int)MOUNTAIN].index = MOUNTAIN;
+	prototypes[(int)MOUNTAIN].mesh = Mesh::Get("data/nature/rocks/mountain.OBJ");
+	prototypes[(int)MOUNTAIN].texture = Texture::Get("data/nature/rocks/mountain.tga");
+
+	prototypes[(int)MOLINO].index = MOLINO;
+	prototypes[(int)MOLINO].mesh = Mesh::Get("data/nature/others/molino.OBJ");
+	prototypes[(int)MOLINO].texture = Texture::Get("data/nature/others/molino.tga");
+
+	prototypes[(int)ASPA].index = ASPA;
+	prototypes[(int)ASPA].mesh = Mesh::Get("data/nature/others/aspa.OBJ");
+	prototypes[(int)ASPA].texture = Texture::Get("data/nature/others/aspa.tga");
+
+	/******HOUSES******/
 	prototypes[(int)WESTHOUSE].index = WESTHOUSE;
 	prototypes[(int)WESTHOUSE].mesh = Mesh::Get("data/buildings/westhouse.OBJ");
 	prototypes[(int)WESTHOUSE].texture = Texture::Get("data/buildings/westhouse.tga");
@@ -45,13 +78,17 @@ GameMap::GameMap()
 	prototypes[(int)WESTHOUSE2].mesh = Mesh::Get("data/buildings/house2.OBJ");
 	prototypes[(int)WESTHOUSE2].texture = Texture::Get("data/buildings/house2.tga");
 
-	prototypes[(int)TREE3].index = TREE3;
-	prototypes[(int)TREE3].mesh = Mesh::Get("data/nature/tree/tree3.OBJ");
-	prototypes[(int)TREE3].texture = Texture::Get("data/nature/tree/tree3.tga");
+	prototypes[(int)WESTHOUSE3].index = WESTHOUSE3;
+	prototypes[(int)WESTHOUSE3].mesh = Mesh::Get("data/buildings/house3.OBJ");	
+	prototypes[(int)WESTHOUSE3].texture = Texture::Get("data/buildings/house3.tga");
 
-	prototypes[(int)CACTUS].index = CACTUS;
-	prototypes[(int)CACTUS].mesh = Mesh::Get("data/buildings/cactus.OBJ");
-	prototypes[(int)CACTUS].texture = Texture::Get("data/buildings/cactus.tga");
+	prototypes[(int)WESTHOUSE4].index = WESTHOUSE4;
+	prototypes[(int)WESTHOUSE4].mesh = Mesh::Get("data/buildings/house4.OBJ");
+	prototypes[(int)WESTHOUSE4].texture = Texture::Get("data/buildings/house4.tga");
+
+	prototypes[(int)HOUSECORNER].index = HOUSECORNER;
+	prototypes[(int)HOUSECORNER].mesh = Mesh::Get("data/buildings/housecorner.OBJ");
+	prototypes[(int)HOUSECORNER].texture = Texture::Get("data/buildings/housecorner.tga");
 
 	prototypes[(int)TIENDACAMP].index = TIENDACAMP;
 	prototypes[(int)TIENDACAMP].mesh = Mesh::Get("data/buildings/tiendacamp.OBJ");
@@ -61,21 +98,39 @@ GameMap::GameMap()
 	prototypes[(int)TIENDACAMP2].mesh = Mesh::Get("data/buildings/tiendacamp2.OBJ");
 	prototypes[(int)TIENDACAMP2].texture = Texture::Get("data/buildings/tiendacamp2.tga");
 
-	prototypes[(int)ORANGEGRASS].index = ORANGEGRASS;
-	prototypes[(int)ORANGEGRASS].mesh = Mesh::Get("data/nature/grass/orangegrass.OBJ");
-	prototypes[(int)ORANGEGRASS].texture = Texture::Get("data/nature/grass/orangegrass.tga");
+	/*****FENCES*****/
+	prototypes[(int)FENCE].index = FENCE;
+	prototypes[(int)FENCE].mesh = Mesh::Get("data/nature/fence/fence.OBJ");
+	prototypes[(int)FENCE].texture = Texture::Get("data/nature/fence/fence.tga");
 
-	prototypes[(int)TREE4].index = TREE4;
-	prototypes[(int)TREE4].mesh = Mesh::Get("data/nature/tree/treeorange.OBJ");
-	prototypes[(int)TREE4].texture = Texture::Get("data/nature/tree/treeorange.tga");
+	prototypes[(int)FENCEBROKEN].index = FENCEBROKEN;
+	prototypes[(int)FENCEBROKEN].mesh = Mesh::Get("data/nature/fence/fencebroken.OBJ");
+	prototypes[(int)FENCEBROKEN].texture = Texture::Get("data/nature/fence/fencebroken.tga");
 
-	prototypes[(int)FIRE].index = FIRE;
-	prototypes[(int)FIRE].mesh = Mesh::Get("data/nature/rocks/fire.OBJ");
-	prototypes[(int)FIRE].texture = Texture::Get("data/nature/rocks/fire.tga");
+	prototypes[(int)FENCECURVE].index = FENCECURVE;
+	prototypes[(int)FENCECURVE].mesh = Mesh::Get("data/nature/fence/fencecurve.OBJ");
+	prototypes[(int)FENCECURVE].texture = Texture::Get("data/nature/fence/fencecurve.tga");
 
-	prototypes[(int)MOUNTAIN].index = MOUNTAIN;
-	prototypes[(int)MOUNTAIN].mesh = Mesh::Get("data/nature/rocks/mountain.OBJ");
-	prototypes[(int)MOUNTAIN].texture = Texture::Get("data/nature/rocks/mountain.tga");
+	prototypes[(int)FENCEDOOR].index = FENCEDOOR;
+	prototypes[(int)FENCEDOOR].mesh = Mesh::Get("data/nature/fence/fencedoor.OBJ");
+	prototypes[(int)FENCEDOOR].texture = Texture::Get("data/nature/fence/fencedoor.tga");
+
+	/*****WEAPONS*****/
+	prototypes[(int)BULLET].index = BULLET;
+	prototypes[(int)BULLET].mesh = Mesh::Get("data/weapons/bullet.OBJ");
+	prototypes[(int)BULLET].texture = Texture::Get("data/weapons/bullet.tga");
+
+	prototypes[(int)REVOLVER].index = REVOLVER;
+	prototypes[(int)REVOLVER].mesh = Mesh::Get("data/weapons/revolver.OBJ");
+	prototypes[(int)REVOLVER].texture = Texture::Get("data/weapons/revolver.tga");
+
+	prototypes[(int)SHOTGUN].index = SHOTGUN;
+	prototypes[(int)SHOTGUN].mesh = Mesh::Get("data/weapons/shotgun.OBJ");
+	prototypes[(int)SHOTGUN].texture = Texture::Get("data/weapons/shotgun.tga");
+
+	prototypes[(int)MICROGUN].index = MICROGUN;
+	prototypes[(int)MICROGUN].mesh = Mesh::Get("data/weapons/microgun.OBJ");
+	prototypes[(int)MICROGUN].texture = Texture::Get("data/weapons/microgun.tga");
 }
 
 
@@ -98,11 +153,12 @@ bool GameMap::loadMap(const char* filename)
 		return false;
 	}
 
-	//number of elements we need to read for creating an entity (type, position, scale)
+	//number of elements we need to read for creating an entity (type, position, rotation, scale)
 	int num_elements = 4;
 	int obtained = 0;
 	Scene* scene = Scene::getInstance();
-	
+	scene->initAspas();
+
 	//variables to get the elements
 	int type = 0;
 	float x = 0.0;	//position of the mesh
@@ -133,7 +189,7 @@ bool GameMap::loadMap(const char* filename)
 		{
 			if (obtained == 2) {
 				rot = tp.getfloat();
-				obtained = 3;
+				obtained = 3;	//we have the rotation
 			}
 		}
 		else if (str == "SCALE")
@@ -152,14 +208,22 @@ bool GameMap::loadMap(const char* filename)
 		//if we have all the elements needed to create the entity
 		if (obtained == num_elements) {
 			sProp* prop = &prototypes[type];	//prototype which contains info about its mesh, texture and shader
-			//EntityMesh* ent = new EntityMesh(prop.index, prop.texture, prop.mesh, prop.shader);
+
 			EntityMesh* ent = new EntityMesh(prop);
 			ent->model.setTranslation(x, y, z);
 			ent->angle = rot;
 			ent->model.rotate(rot * DEG2RAD, Vector3(0, 1, 0));
 			ent->setScaleFactor(sc);
-			scene->root.addChild(ent);
+			if (ent->prop->index == TREE4) {
+				scene->tree->addTree(ent->model);
+			}
+			else {
+				scene->root.addChild(ent);
+			}
 			obtained = 0;
+			if (ent->prop->index == ASPA) {
+				scene->addAspas(&ent->model);
+			}
 		}
 
 	}
@@ -181,9 +245,19 @@ void GameMap::saveMap()
 
 	Scene* scene = Scene::getInstance();
 	Entity sroot = scene->root;
+	
 
+	//save world entities
 	for (int i = 0; i < sroot.children.size(); i++) {
 		saveEntity(fp, sroot.children[i]);
+	}
+
+	//save world trees
+	for (int i = 0; i < scene->tree->vertices.size(); i++) {
+		Matrix44 tree_model = scene->tree->vertices[i];
+		Entity* ent = new Entity(scene->tree->getType());
+		ent->model = tree_model;
+		saveEntity(fp, ent);
 	}
 
 	fclose(fp);
@@ -194,7 +268,7 @@ void GameMap::saveEntity(FILE* filename, Entity* ent) {
 	
 	//extract useful info from the enity
 	int type = (int)ent->type;
-	if (type == (int)PLAYER)	//not save the player
+	if (type == (int)PLAYER || type == (int)EMPTY)	//not save the player or empty entities
 		return;
 
 	Vector3 pos = ent->getPosition();
@@ -213,7 +287,7 @@ void GameMap::saveEntity(FILE* filename, Entity* ent) {
 	}
 }
 
-//in case there is no file, create a basic map
+//create a basic map just in case the map file does not exist
 void GameMap::createBasicMap()
 {
 	Scene* scene = Scene::getInstance();
