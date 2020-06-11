@@ -135,6 +135,7 @@ void EnemyManager::update(double seconds_elapsed)
 
 			if (enemy->health <= 0.0)
 			{
+				//the body will remain in the scene it will not disappear
 				enemy->isDead = true;
 			}
 		}
@@ -220,9 +221,29 @@ void EnemyManager::selectSkeleton(sEnemy* enemy, float time)
 	}
 }
 
-void EnemyManager::onBulletCollision(Bullet* bullet, sEnemy* enemy)
+void EnemyManager::onBulletCollision(Bullet* bullet, sEnemy* enemy, Vector3 point_collision)
 {
 	bullet->time_to_live = 0;
 
 	enemy->health -= bullet->power;
+
+	//bullet impact afect a bit the position of the enemy
+	enemy->position = enemy->position + bullet->velocity * 0.01;
+}
+
+void EnemyManager::setDifficulty(eDifficultyEnemy diff, Vector3* _player_pos)
+{
+	//set values depending on the difficulty
+	//float _health;
+	//float _bullet_damage;
+
+	for (int i = 0; i < MAX_ENEMIES; i++)
+	{
+		sEnemy* enemy = &enemies[i];
+
+		if (enemy->isActive == false)
+			continue;
+
+		enemy->player_position = _player_pos;
+	}
 }

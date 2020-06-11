@@ -6,6 +6,8 @@ varying vec4 v_color;
 
 uniform vec4 u_color;
 uniform sampler2D u_texture;
+uniform sampler2D u_detail_texture;
+uniform sampler2D u_detail2_texture;
 uniform float u_time;
 
 uniform vec3 u_camera_pos;
@@ -23,7 +25,11 @@ void main()
 	vec2 uv = v_uv;
 
     vec4 color = u_color * texture2D( u_texture, uv );
+	//mix using the detail texture
+	vec4 detail_color = texture2D( u_detail2_texture, uv * 100 );
+	color = mix(color, detail_color, 0.4);
 
+	//apply phong illumination
 	vec3 light_vector = normalize(light_position - v_world_position);
 	vec3 eye_vector = normalize(v_world_position - u_camera_pos);	
 	vec3 R = reflect(light_vector, v_normal);
@@ -49,15 +55,12 @@ void main()
     distance = pow(distance, 0.6);
 
     //cuanto mas lejos este el objeto mas tendera a ese color
-    vec3 fog_color = vec3(182.0/255.0, 172.0/255.0, 158.0/255.0) * 0.6;
+    vec3 fog_color = vec3(215.0/255.0, 205.0/255.0, 187.0/255.0) * 0.6;
     //interpolacion lineal
     color.xyz = mix(color.xyz, fog_color, distance);
 	
 	color.rgb *= specular + ambient + diffuse ;
 
-	//set the ouput color por the pixel
-	//gl_FragColor = vec4( color, 1.0 ) * 1.0;
-
-	//color.xyz *= light;
     gl_FragColor = color;
 }
+

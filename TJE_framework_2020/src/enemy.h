@@ -23,6 +23,8 @@ struct sEnemy {
 	void setEnemyValues(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, float _speed, float _health, float _bullet_damage, float _angle, bool _isActive);
 };
 
+enum eDifficultyEnemy { EASY_ENEMY, MEDIUM_ENEMY, HARD_ENEMY };
+
 class EnemyManager
 {
 private:
@@ -51,6 +53,8 @@ public:
 	void update(double seconds_elapsed);
 	void createEnemy(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, float _speed, float _life, float _bullet_damage, float _angle);
 	void selectSkeleton(sEnemy* enemy, float time = 0);
-	void onBulletCollision(Bullet* bullet, sEnemy* enemy);
+	void onBulletCollision(Bullet* bullet, sEnemy* enemy, Vector3 point_collision);
+
+	void setDifficulty(eDifficultyEnemy diff, Vector3* _player_pos);
 };
 #endif

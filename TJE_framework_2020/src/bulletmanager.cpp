@@ -5,10 +5,11 @@
 #include "gamemap.h"
 #include "scene.h"
 #include "enemy.h"
+#include <algorithm>
 
 BulletManager* BulletManager::instance = NULL;
 
-BulletManager::BulletManager() { initBullets(); tolerance = LOW; }
+BulletManager::BulletManager() { initBullets(); initHitMarks(); tolerance = LOW; }
 
 BulletManager* BulletManager::getInstance()
 {
@@ -53,23 +54,24 @@ void BulletManager::render()
 	Shader* shader_instanced = Shader::Get("data/shaders/instanced.vs", "data/shaders/texture.fs");
 	Camera* camera = Camera::current;
 
-	if (vertices.size() == 0)
-		return;
+	if (vertices.size() != 0) {
+		//enable shader
+		shader_instanced->enable();
 
-	//enable shader
-	shader_instanced->enable();
+		//upload uniforms
+		shader_instanced->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shader_instanced->setUniform("u_viewprojection", camera->viewprojection_matrix);
+		shader_instanced->setUniform("u_texture", GameMap::getInstance()->prototypes[(int)BULLET].texture, 0);
+		shader_instanced->setUniform("u_camera_pos", camera->eye);
 
-	//upload uniforms
-	shader_instanced->setUniform("u_color", Vector4(1, 1, 1, 1));
-	shader_instanced->setUniform("u_viewprojection", camera->viewprojection_matrix);
-	shader_instanced->setUniform("u_texture", GameMap::getInstance()->prototypes[(int)BULLET].texture, 0);
-	shader_instanced->setUniform("u_camera_pos", camera->eye);
-	
-	Mesh* mesh = GameMap::getInstance()->prototypes[(int)BULLET].mesh;
-	mesh->renderInstanced(GL_TRIANGLES, &vertices[0], vertices.size());
-	
-	//disable shader
-	shader_instanced->disable();
+		Mesh* mesh = GameMap::getInstance()->prototypes[(int)BULLET].mesh;
+		mesh->renderInstanced(GL_TRIANGLES, &vertices[0], vertices.size());
+
+		//disable shader
+		shader_instanced->disable();
+	}
+
+	renderHitMarks();
 }
 
 void BulletManager::update(double seconds_elapsed)
@@ -94,6 +96,16 @@ void BulletManager::update(double seconds_elapsed)
 			//remove bullet
 			bullet->setBulletValues(Vector3(), Vector3(), 0, 0, EMPTY_BULLET, 0, 0, false);
 		}
+	}
+
+	//hit marks
+	for (int i = 0; i < MAX_HITS; i++)
+	{
+		sHitMark& mark = marks[i];
+		if (mark.ttl <= 0)
+			continue;
+
+		mark.ttl -= seconds_elapsed;
 	}
 }
 
@@ -174,7 +186,8 @@ void BulletManager::hasCollisioned()
 			if (mesh->testSphereCollision(m, bullet->position, radius_tolerance, collision, collision_normal) == false)
 				continue;
 
-			enemyMan->onBulletCollision(bullet, &enemy);
+			enemyMan->onBulletCollision(bullet, &enemy, collision);
+			createHitMark(Vector3(bullet->position.x, bullet->position.y, bullet->position.z));
 			enemyMan->enemies[i] = enemy;
 			break;
 		}
@@ -193,4 +206,98 @@ void Bullet::setBulletValues(Vector3 _pos, Vector3 _vel, float _ttl, float _powe
 	type = _type;
 	isUsed = _isUsed;
 	angle = _angle;
+}
+
+
+/********HIT MARKS*******/
+bool compare_distance_func(const sHitMark& a, const sHitMark& b)
+{
+	Camera* cam = Camera::current;
+	float distA = a.pos.distance(cam->eye);
+	float distB = b.pos.distance(cam->eye);
+	return distA > distB;
+}
+
+void BulletManager::initHitMarks()
+{
+	marks.resize(100);
+	for (int i = 0; i < MAX_HITS; i++)
+	{
+		sHitMark& mark = marks[i];
+
+		mark.pos = Vector3();
+		mark.size = 0;
+		mark.ttl = 0;
+	}
+}
+
+void BulletManager::createHitMark(Vector3 _pos)
+{
+	for (int i = 0; i < MAX_HITS; i++)
+	{
+		sHitMark& mark = marks[i];
+		if (mark.ttl > 0)
+			continue;
+
+		mark.pos = _pos;
+		mark.size = 0.5;
+		mark.ttl = 0.1;
+		break;
+	}
+}
+
+void BulletManager::renderHitMarks()
+{
+	Mesh quad;
+	Camera* camera = Camera::current;
+
+	Vector3 right = camera->getLocalVector(Vector3(1, 0, 0));
+	Vector3 top = camera->getLocalVector(Vector3(0, 1, 0));
+	Vector3 bottom = camera->getLocalVector(Vector3(0, -1, 0));
+
+	std::sort(marks.begin(), marks.end(), compare_distance_func);
+
+	for (int i = 0; i < marks.size(); i++) {
+		sHitMark& hm = marks[i];
+		if (hm.ttl <= 0)
+			continue;
+		Vector3 pos = hm.pos;
+		float size = hm.size;
+
+		quad.vertices.push_back(pos + (top - right) * size);
+		quad.uvs.push_back(Vector2(0, 1));
+		quad.vertices.push_back(pos + (bottom - right) * size);
+		quad.uvs.push_back(Vector2(0, 0));
+		quad.vertices.push_back(pos + (bottom + right) * size);
+		quad.uvs.push_back(Vector2(1, 0));
+
+		quad.vertices.push_back(pos + (top - right) * size);
+		quad.uvs.push_back(Vector2(0, 1));
+		quad.vertices.push_back(pos + (bottom + right) * size);
+		quad.uvs.push_back(Vector2(1, 0));
+		quad.vertices.push_back(pos + (top + right) * size);
+		quad.uvs.push_back(Vector2(1, 1));
+	}
+
+	if (quad.vertices.size() > 0) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//read from z buffer but not write on it
+		glDepthMask(false);
+		Matrix44 qm;
+		//enable shader
+		Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+		shader->enable();
+
+		//upload uniforms
+		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
+		shader->setUniform("u_texture", Texture::Get("data/hit.tga"), 0);
+		shader->setUniform("u_model", qm);
+
+		shader->setUniform("u_camera_pos", camera->eye);
+		quad.render(GL_TRIANGLES);
+		glDisable(GL_BLEND);
+		glDepthMask(true);
+	}
 }

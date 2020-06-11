@@ -20,7 +20,7 @@ GameMap::GameMap()
 
 	prototypes[(int)CHARACTER].index = CHARACTER;
 	prototypes[(int)CHARACTER].mesh = Mesh::Get("data/characters/animation/character3.mesh");
-	prototypes[(int)CHARACTER].texture = Texture::Get("data/characters/zombie.tga");
+	prototypes[(int)CHARACTER].texture = Texture::Get("data/characters/survivorFemale.tga");
 	prototypes[(int)CHARACTER].shader = Shader::Get("data/shaders/skinning.vs", "data/shaders/phong.fs");
 
 	prototypes[(int)ENEMY].index = ENEMY;
@@ -159,6 +159,9 @@ bool GameMap::loadMap(const char* filename)
 	Scene* scene = Scene::getInstance();
 	scene->initAspas();
 
+	//get enemy manager for creating the enemies
+	EnemyManager* enemy_manager = EnemyManager::getInstance();
+
 	//variables to get the elements
 	int type = 0;
 	float x = 0.0;	//position of the mesh
@@ -209,20 +212,26 @@ bool GameMap::loadMap(const char* filename)
 		if (obtained == num_elements) {
 			sProp* prop = &prototypes[type];	//prototype which contains info about its mesh, texture and shader
 
-			EntityMesh* ent = new EntityMesh(prop);
-			ent->model.setTranslation(x, y, z);
-			ent->angle = rot;
-			ent->model.rotate(rot * DEG2RAD, Vector3(0, 1, 0));
-			ent->setScaleFactor(sc);
-			if (ent->prop->index == TREE4) {
-				scene->tree->addTree(ent->model);
+			if (prop->index == ENEMY) {
+				enemy_manager->createEnemy(Vector3(x, y, z), Vector3(0, 0, 0), NULL, 10, 50, 1, 0);
 			}
 			else {
-				scene->root.addChild(ent);
-			}
-			obtained = 0;
-			if (ent->prop->index == ASPA) {
-				scene->addAspas(&ent->model);
+
+				EntityMesh* ent = new EntityMesh(prop);
+				ent->model.setTranslation(x, y, z);
+				ent->angle = rot;
+				ent->model.rotate(rot * DEG2RAD, Vector3(0, 1, 0));
+				ent->setScaleFactor(sc);
+				if (ent->prop->index == TREE4) {
+					scene->tree->addTree(ent->model);
+				}
+				else {
+					scene->root.addChild(ent);
+				}
+				obtained = 0;
+				if (ent->prop->index == ASPA) {
+					scene->addAspas(&ent->model);
+				}
 			}
 		}
 
@@ -260,6 +269,10 @@ void GameMap::saveMap()
 		saveEntity(fp, ent);
 	}
 
+	//save enemies
+	EnemyManager* enemy_manager = EnemyManager::getInstance();
+	saveEnemies(fp, enemy_manager);	
+
 	fclose(fp);
 	std::cout << "Saved!" << std::endl;
 }
@@ -284,6 +297,27 @@ void GameMap::saveEntity(FILE* filename, Entity* ent) {
 	//save its children
 	for (int i = 0; i < ent->children.size(); i++) {
 		saveEntity(filename, ent->children[i]);
+	}
+}
+
+void GameMap::saveEnemies(FILE* filename, EnemyManager* enemy_manager) {
+
+	for (int i = 0; i < enemy_manager->MAX_ENEMIES; i++) {
+		sEnemy* enemy = &enemy_manager->enemies[i];
+		if (enemy->isActive == false)
+			continue;
+		
+		//information of the enemy to save
+		Vector3 pos = enemy->position;
+		float rotation = enemy->angle;
+		float scale = 1;
+		int type = (int)enemy->prop->index;
+
+		//save to file
+		fprintf(filename, "TYPE %d ", type);
+		fprintf(filename, "POSITION %f %f %f ", pos.x, pos.y, pos.z);
+		fprintf(filename, "ROTATION %f ", rotation);
+		fprintf(filename, "SCALE %f \n", scale);
 	}
 }
 

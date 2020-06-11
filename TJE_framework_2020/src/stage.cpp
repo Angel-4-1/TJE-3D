@@ -542,7 +542,6 @@ void EditorStage::onKeyDown(SDL_KeyboardEvent event)
 	}
 }
 
-
 /*********PLAY STAGE********/
 PlayStage::PlayStage(Player* _player, Camera* _camera, bool* _free_cam, SkyBox* _sky, Mesh* _plane, Character* _character) : Stage()
 {
@@ -563,6 +562,7 @@ PlayStage::PlayStage(Player* _player, Camera* _camera, bool* _free_cam, SkyBox* 
 	audio_ambient = Audio::Get("data/audio/OutlawsFromTheWest.mp3");
 	channel_ambient = audio_ambient->playSound(0);
 	volume_ambient = 0.0;
+	texture_atlas = Texture::Get("data/atlasPlay.png");
 }
 
 void PlayStage::render(void)
@@ -586,6 +586,26 @@ void PlayStage::render(void)
 		renderWithFBO();
 	}
 
+	if (selected == NONE_PLAY) {
+		//some buttons
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDisable(GL_DEPTH_TEST);
+		float window_height = Game::instance->window_height;
+		float window_width = Game::instance->window_width;
+		float window_centerx = window_width / 2.0;
+		float aspect = window_width / window_height;
+		Vector4 color_hover(1, 1, 1, 1);
+		Vector4 color_transparent(1, 1, 1, 0.6);
+		Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texturegui.fs");
+		if (renderButton((window_centerx + (window_centerx / 1.15)), 30 * aspect, 50 * aspect, 50 * aspect, menu_atlas[(int)PAUSE_PLAY], texture_atlas, shader, color_hover, color_transparent, false)) {
+			change = true;
+			change_to = PAUSE_STAGE;
+			selected = PAUSE_PLAY;
+		}
+		glDisable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
+	}
 }
 
 //render world using the FBO
@@ -629,12 +649,15 @@ void PlayStage::renderWorld()
 	glEnable(GL_DEPTH_TEST);
 	/**********PLANE************/
 	Shader* shader;
-	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/phong.fs");
+	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/textureTerrain.fs");
 	shader->enable();
 	Scene::getInstance()->light->uploadToShader(shader);
 	shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+	shader->setUniform("u_camera_pos", camera->eye);
 	shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
 	shader->setUniform("u_texture", Texture::Get("data/plane.png"), 0);
+	shader->setUniform("u_detail_texture", Texture::Get("data/detail.TGA"), 1);
+	shader->setUniform("u_detail2_texture", Texture::Get("data/detail2.TGA"), 2);
 	shader->setUniform("u_model", Matrix44());
 	shader->setUniform("u_material_shininess", 1000000.0f);
 	plane->render(GL_TRIANGLES);
@@ -669,6 +692,16 @@ void PlayStage::update(double seconds_elapsed)
 	saveCharacter();
 	audio_ambient->changeVolume(channel_ambient, volume_ambient);
 
+	//update bullets
+	BulletManager::getInstance()->update(seconds_elapsed);
+	BulletManager::getInstance()->hasCollisioned();
+
+	//update enemies
+	EnemyManager::getInstance()->update(seconds_elapsed);
+
+	//update aspas
+	Scene::getInstance()->updateAspas(seconds_elapsed);
+
 	if (player->health <= 0) {
 		change = true;
 		change_to = GAMEOVER_STAGE;
@@ -680,7 +713,7 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event)
 	switch (event.keysym.sym)
 	{
 		case SDLK_z: 
-			player->setSpeed(200); 
+			player->setSpeed(150); 
 			break;
 		case SDLK_SPACE:
 			if (player->hasGun == true)
@@ -693,23 +726,65 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event)
 				Matrix44 R;
 				R.setRotation(player->gun->angle * DEG2RAD, Vector3(0, 1, 0));
 				Vector3 front = R.rotateVector(Vector3(0, 0, -1));
-				bm->createBullet(pos, front * 20, player->gun->scope, player->gun->damage, eAuthor::PLAYER_BULLET, 1, player->gun->angle);
+				Vector3 vel = front * 150;
+				bm->createBullet(pos, vel , player->gun->scope, player->gun->damage, eAuthor::PLAYER_BULLET, 1, player->gun->angle);
+
+				//player knockback
+				player->position = player->position - vel * 0.001;
+
+				//screen shake
+				//Camera* current = Camera::current;
+				//current->eye = current->eye - 3*Vector3(0, 1, 0);
+				
+				if (player->gun->prop->index == eType::SHOTGUN) {
+					//up right
+					Matrix44 R1;
+					R1.setRotation((player->gun->angle + 5) * DEG2RAD, Vector3(0, 1, 0));
+					Vector3 front1 = R1.rotateVector(Vector3(0.05, 0.05, -1));
+					Vector3 vel1 = front1 * 150;
+					bm->createBullet(pos, vel1, player->gun->scope, player->gun->damage, eAuthor::PLAYER_BULLET, 1, player->gun->angle + 5);
+
+					//midle right
+					R1.setRotation((player->gun->angle + 5) * DEG2RAD, Vector3(0, 1, 0));
+					front1 = R1.rotateVector(Vector3(0.05, 0, -1));
+					vel1 = front1 * 150;
+					bm->createBullet(pos, vel1, player->gun->scope, player->gun->damage, eAuthor::PLAYER_BULLET, 1, player->gun->angle + 5);
+
+					//up left
+					R1.setRotation((player->gun->angle - 5) * DEG2RAD, Vector3(0, 1, 0));
+					front1 = R1.rotateVector(Vector3(-0.05, 0.05, -1));
+					vel1 = front1 * 150;
+					bm->createBullet(pos, vel1, player->gun->scope, player->gun->damage, eAuthor::PLAYER_BULLET, 1, player->gun->angle - 5);
+
+					//midle left
+					R1.setRotation((player->gun->angle - 5) * DEG2RAD, Vector3(0, 1, 0));
+					front1 = R1.rotateVector(Vector3(-0.05, 0, -1));
+					vel1 = front1 * 150;
+					bm->createBullet(pos, vel1, player->gun->scope, player->gun->damage, eAuthor::PLAYER_BULLET, 1, player->gun->angle - 5);
+
+					//up midle
+					R1.setRotation(player->gun->angle * DEG2RAD, Vector3(0, 1, 0));
+					front1 = R1.rotateVector(Vector3(0, 0.05, -1));
+					vel1 = front1 * 150;
+					bm->createBullet(pos, vel1, player->gun->scope, player->gun->damage, eAuthor::PLAYER_BULLET, 1, player->gun->angle);
+
+					player->position = player->position - vel * 0.002;
+
+					Audio* audio = Audio::Get("data/audio/shotgun_shot2.wav");
+					audio->playSound();
+				}
+				else if (player->gun->prop->index == eType::REVOLVER){
+					Audio* audioR = Audio::Get("data/audio/revolver_shot2.wav");
+					audioR->playSound();
+				}
+				else {	//microgun
+					Audio* audioM = Audio::Get("data/audio/microgun_shot.wav");
+					audioM->playSound();
+				}
 			}
 			break;
 		case SDLK_6:	//render the world with an FBO
 			active_fbo = !active_fbo;
-			break;
-		case SDLK_7:
-			change = true;
-			change_to = PAUSE_STAGE;
-			break;
-		case SDLK_8: 
-			volume_ambient += 0.1;
-			volume_ambient = volume_ambient <= 1.0 ? volume_ambient : 1.0;
-			break;
-		case SDLK_0: 
-			volume_ambient -= 0.1;
-			volume_ambient = volume_ambient >= 0.0 ? volume_ambient : 0.0;
 			break;
 	}
 }
@@ -719,7 +794,7 @@ void PlayStage::onKeyUp(SDL_KeyboardEvent event)
 	switch (event.keysym.sym)
 	{
 	case SDLK_z:
-		player->setSpeed(75);
+		player->setSpeed(50);
 		break;
 	default:
 		break;
@@ -825,30 +900,22 @@ void PauseStage::renderVolume(float width, float height)
 		if (target > 0.0) {
 			play_stage->volume_ambient = target;
 			volume_bars -= 1;
-		}
-		
+		}		
 	}
 
 	if (renderButton(window_centerx + window_quart, 230 * aspect, 50 * aspect, 50 * aspect, menu_atlas[(int)MUSIC_HIGH_PAUSE], texture_atlas, shader, color_hover, color_transparent, false)) {
 		float target = play_stage->volume_ambient + 0.1;
-		if (target <= 1) {
+		if (target < 1.1) {
 			play_stage->volume_ambient = target;
 			volume_bars += 1;
 		}
-		std::cout << volume_bars;
-		std::cout << "\t"<< play_stage->volume_ambient;
-		std::cout << "\t"<< target << std::endl;
 	}
 
 	//compute distance between bars volume
 	float dist = (window_centerx + window_quart - 50 * aspect) - (window_quart + 50 * aspect);
 	dist = dist / 9.0;
 
-	//get volume from play stage
-	//float volume = play_stage->volume_ambient;
-
 	//draw the bars volume
-	//int volume_bars = (int)(volume * 10.0f);
 	for (int i = 0; i < volume_bars; i++) {
 		renderGUI((window_quart + 50 * aspect) + (i*dist), 230 * aspect, 50 * aspect, 50 * aspect, menu_atlas[(int)MUSIC_BAR_PAUSE], texture_atlas, shader);
 	}
@@ -899,6 +966,38 @@ void FinalStage::render(void)
 
 void FinalStage::renderWin(void)
 {
+	Camera* camera = Camera::current;
+	camera->enable();
+
+	//set flags
+	glDisable(GL_CULL_FACE);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+
+	float window_height = Game::instance->window_height;
+	float window_width = Game::instance->window_width;
+	float window_centerx = window_width / 2.0;
+	float window_centery = window_height / 2.0;
+
+	float aspect = window_width / window_height;
+
+	renderGUI(window_centerx, window_centery, window_centerx, window_centery, Vector4(0,0,1,1), Texture::Get("data/backgroundWin.png"), Shader::Get("data/shaders/basic.vs", "data/shaders/texturegui.fs"));
+	
+	/*
+	Vector4 color_hover(1, 1, 1, 1);
+	Vector4 color_transparent(1, 1, 1, 0.6);
+
+	if (renderButton(window_centerx, 240 * aspect, 150 * aspect, 50 * aspect, menu_atlas[(int)START_INTRO], texture_atlas, shader, color_hover, color_transparent, selected == START_INTRO)) {
+		selected = START_INTRO;
+		change = true;
+		change_to = PLAY_STAGE;
+	}
+	*/
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 }
 
 void FinalStage::renderGameOver(void)
@@ -907,7 +1006,41 @@ void FinalStage::renderGameOver(void)
 	width = width / 2.0;
 	float height = Game::instance->window_height;
 	height = height / 2.0;
-	drawText(width, height, "YOU DIED, GAME OVER", Vector3(1, 1, 1), 2);
+	//drawText(width, height, "YOU DIED, GAME OVER", Vector3(1, 1, 1), 2);
+
+
+	Camera* camera = Camera::current;
+	camera->enable();
+
+	//set flags
+	glDisable(GL_CULL_FACE);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+
+	float window_height = Game::instance->window_height;
+	float window_width = Game::instance->window_width;
+	float window_centerx = window_width / 2.0;
+	float window_centery = window_height / 2.0;
+
+	float aspect = window_width / window_height;
+
+	renderGUI(window_centerx, window_centery, window_centerx * aspect, window_centery * aspect, Vector4(0, 0, 1, 1), Texture::Get("data/backgroundWin.png"), Shader::Get("data/shaders/basic.vs", "data/shaders/texturegui.fs"));
+
+	/*
+	Vector4 color_hover(1, 1, 1, 1);
+	Vector4 color_transparent(1, 1, 1, 0.6);
+
+	if (renderButton(window_centerx, 240 * aspect, 150 * aspect, 50 * aspect, menu_atlas[(int)START_INTRO], texture_atlas, shader, color_hover, color_transparent, selected == START_INTRO)) {
+		selected = START_INTRO;
+		change = true;
+		change_to = PLAY_STAGE;
+	}
+	*/
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 }
 
 void FinalStage::onKeyDown(SDL_KeyboardEvent event)

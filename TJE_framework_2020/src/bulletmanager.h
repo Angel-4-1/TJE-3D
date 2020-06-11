@@ -21,6 +21,12 @@ struct Bullet {
 	void setBulletValues(Vector3 _pos, Vector3 _vel, float _ttl, float _power, eAuthor _author, int _type, float _angle, bool _isUsed);
 };
 
+struct sHitMark {
+	Vector3 pos;
+	float size;
+	float ttl;
+};
+
 enum eTolerance { LOW = 8, MEDIUM = 6, HIGH = 4 };
 
 class BulletManager
@@ -44,9 +50,20 @@ public:
 	static BulletManager* getInstance();
 
 	void initBullets();
+	
 	void render();
 	void update(double seconds_elapsed);
 	void createBullet(Vector3 _pos, Vector3 _vel, float _ttl, float _power, eAuthor _author, int _type, float _angle);
+	
 	void hasCollisioned();
+	
+	/****HIT MARKS****/
+	static const int MAX_HITS = 100;
+	//sHitMark hit_marks[MAX_HITS];
+	std::vector<sHitMark> marks;
+
+	void initHitMarks();
+	void createHitMark(Vector3 _pos);
+	void renderHitMarks();
 };
 #endif

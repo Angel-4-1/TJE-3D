@@ -104,9 +104,21 @@ public:
 	void selectEntity();
 };
 
+enum eOptionPlay { NONE_PLAY, PAUSE_PLAY };
+
 class PlayStage : public Stage
 {
 public:
+	static const int NUM_OPTIONS = 10;
+	static const int NUM_OPTIONS_CONTROLS = 6;
+
+	eOptionPlay selected = NONE_PLAY;
+
+	Vector4 menu_atlas[NUM_OPTIONS] = {
+		{0, 0, 0, 0},					// none
+		{0, 0, 0.125, 0.125},		// pause
+	};
+	Texture* texture_atlas;
 
 	Player* player;
 	Character* character;	//friend to find
@@ -137,7 +149,7 @@ public:
 };
 
 enum eOptionPause { NONE_PAUSE, EDITOR_PAUSE, CONTROLS_PAUSE, RETURN_PAUSE, EXIT_PAUSE, TITLE_PAUSE, MUSIC_PAUSE, MUSIC_HIGH_PAUSE, MUSIC_LOW_PAUSE, MUSIC_BAR_PAUSE };
-enum eOptionControls { NONE_CONTROLS, MOVE_CONTROLS, SHOOT_CONTROLS, TITLE_CONTROLS, RETURN_CONTROLS, RUN_CONTROLS };
+enum eOptionControls { NONE_CONTROLS, MOVE_CONTROLS, SHOOT_CONTROLS, RUN_CONTROLS, TITLE_CONTROLS, RETURN_CONTROLS };
 
 class PauseStage : public Stage
 {
@@ -164,9 +176,9 @@ public:
 		{0, 0, 0, 0},					// none
 		{0, 0, 0.125 * 8, 0.125 * 2},		// move
 		{0, 0.125 * 2, 0.125 * 7, 0.125},	// shoot
-		{0, 0.125 * 3, 0.125 * 6, 0.125 * 2},	// title
-		{0, 0.125 * 5, 0.125 * 5, 0.125},	// return
-		{0, 0.125 * 6, 0.125 * 5, 0.125},	// run
+		{0, 0.125 * 3, 0.125 * 5, 0.125},	// run
+		{0, 0.125 * 4, 0.125 * 6, 0.125 * 2},	// title
+		{0, 0.125 * 6, 0.125 * 5, 0.125},	// return
 	};
 
 	PlayStage* play_stage;	//to be able to render the world on the backgroud

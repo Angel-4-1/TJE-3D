@@ -3,6 +3,7 @@
 
 #include "framework.h"
 #include "entity.h"
+#include "enemy.h"
 
 class GameMap
 {
@@ -19,6 +20,7 @@ public:
 	bool loadMap(const char* filename);
 	void saveMap();
 	void saveEntity(FILE* filename, Entity* ent);
+	void saveEnemies(FILE* filename, EnemyManager* enemy_manager);
 
 	void createBasicMap();
 };

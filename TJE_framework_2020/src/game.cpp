@@ -75,6 +75,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	camera->lookAt(Vector3(0.f,100.f, 100.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
 	camera->enable();
+
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/phong.fs");
 
@@ -89,10 +90,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	}
 
 	/*******CREATE THE WORLD*******/
-	// Get instance of the scene
+	//get instance of the scene
 	scene = Scene::getInstance();
 	scene->tree = new Tree();
 
+	//load the map
 	gamemap = new GameMap();
 	bool isLoaded = false;
 	isLoaded = gamemap->loadMap("data/mymap.txt");
@@ -106,6 +108,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	player = new Player(&gamemap->prototypes[(int)PLAYER], 200);
 	scene->player = player;
 
+	//skybox for simulating the sky
 	sky = new SkyBox();
 
 	//plane
@@ -115,6 +118,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	plane_text = Texture::Get("data/plane.png");
 	
 	//Grass instanced
+	/*
 	for (int i = 0; i < 1000; i++)
 	{
 		Matrix44 m;
@@ -125,7 +129,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 		//EntityMesh* gra = new EntityMesh(&gamemap->prototypes[(int)ORANGEGRASS]);
 		//gra->model = m;
 		//scene->tree->addTree(gra);
-	}
+	}*/
 
 	fbo = new FBO();
 	fbo->create(window_width, window_height);
@@ -135,11 +139,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	scene->light->specular_color.set(1, 1, 1);
 	scene->light->position.set(-300, 80, 420);
 
+	//prepare bullets and the enemies
 	bulletmanger = BulletManager::getInstance();
 	enemymanager = EnemyManager::getInstance();
-	enemymanager->createEnemy(Vector3(-300, 0, 400), Vector3(0, 0, 0), &player->position, 10, 50, 1, 0);
-	enemymanager->createEnemy(Vector3(-300, 0, 350), Vector3(0, 0, 0), &player->position, 10, 50, 1, 0);
-	enemymanager->createEnemy(Vector3(-250, 0, 350), Vector3(0, 0, 0), &player->position, 10, 50, 1, 0);
+	//enemymanager->createEnemy(Vector3(-300, 0, 400), Vector3(0, 0, 0), &player->position, 10, 50, 1, 0);
+	enemymanager->setDifficulty(eDifficultyEnemy::EASY_ENEMY, &player->position);
 	ch = new Character(&gamemap->prototypes[(int)CHARACTER], Vector3(-200, 0, 400), 10, &player->position);
 
 	//init stages
@@ -197,26 +201,18 @@ void Game::update(double seconds_elapsed)
 	}
 
 	//Light position
-	if (Input::isKeyPressed(SDL_SCANCODE_Z)) scene->light->position = scene->light->position + Vector3(1, 0, 0);
-	if (Input::isKeyPressed(SDL_SCANCODE_X)) scene->light->position = scene->light->position + Vector3(-1, 0, 0);
-	if (Input::isKeyPressed(SDL_SCANCODE_C)) scene->light->position = scene->light->position + Vector3(0, 1, 0);
-	if (Input::isKeyPressed(SDL_SCANCODE_V)) scene->light->position = scene->light->position + Vector3(0, -1, 0);
-	if (Input::isKeyPressed(SDL_SCANCODE_B)) scene->light->position = scene->light->position + Vector3(0, 0, 1);
-	if (Input::isKeyPressed(SDL_SCANCODE_N)) scene->light->position = scene->light->position + Vector3(0, 0, -1);
+	//if (Input::isKeyPressed(SDL_SCANCODE_Z)) scene->light->position = scene->light->position + Vector3(1, 0, 0);
+	//if (Input::isKeyPressed(SDL_SCANCODE_X)) scene->light->position = scene->light->position + Vector3(-1, 0, 0);
+	//if (Input::isKeyPressed(SDL_SCANCODE_C)) scene->light->position = scene->light->position + Vector3(0, 1, 0);
+	//if (Input::isKeyPressed(SDL_SCANCODE_V)) scene->light->position = scene->light->position + Vector3(0, -1, 0);
+	//if (Input::isKeyPressed(SDL_SCANCODE_B)) scene->light->position = scene->light->position + Vector3(0, 0, 1);
+	//if (Input::isKeyPressed(SDL_SCANCODE_N)) scene->light->position = scene->light->position + Vector3(0, 0, -1);
 
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
 		Input::centerMouse();
-
-	//update bullets
-	bulletmanger->update(seconds_elapsed);
-	bulletmanger->hasCollisioned();
-
-	scene->updateAspas();
-
-	//update enemies
-	enemymanager->update(seconds_elapsed);
-
+	
+	//change state
 	if (current_stage->change) {
 		changeState();
 	}
@@ -244,6 +240,7 @@ void Game::changeState()
 		break;
 	case sType::PLAY_STAGE:
 		current_stage = play_stage;
+		play_stage->selected = eOptionPlay::NONE_PLAY;
 		free_cam = false;
 		break;
 	case sType::PAUSE_STAGE:

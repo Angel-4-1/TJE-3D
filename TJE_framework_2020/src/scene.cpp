@@ -14,7 +14,7 @@ Scene* Scene::getInstance()
 	return instance;
 }
 
-void Scene::updateAspas()
+void Scene::updateAspas(float seconds_elapsed)
 {
 	for (int i = 0; i < MAX_ASPAS; i++) {
 		if (aspas[i] == NULL)
@@ -22,7 +22,7 @@ void Scene::updateAspas()
 
 		Matrix44* asp = aspas[i];
 		Vector3 pos = asp->getTranslation();
-		asp->rotate(5 * DEG2RAD, Vector3(1, 0, 0));
+		asp->rotate((250*seconds_elapsed) * DEG2RAD, Vector3(1, 0, 0));
 	}
 }
 

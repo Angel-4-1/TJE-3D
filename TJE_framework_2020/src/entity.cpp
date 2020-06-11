@@ -156,7 +156,7 @@ Player::Player(sProp* _prop, float _health) : EntityMesh(_prop)
 	position = Vector3(-330, 0 , 420);
 	model.setTranslation(position.x, position.y, position.z);
 	model.rotate(180 * DEG2RAD, Vector3(0, 1, 0));
-	speed = 75;
+	speed = 50;
 	hasGun = false;
 	angle = 0;
 	time_animation = 0;
@@ -334,7 +334,7 @@ void Player::update(double seconds_elapsed)
 	if (Input::isKeyPressed(SDL_SCANCODE_D)) { delta = delta + right; angle += speed_turn; }
 
 	velocity = velocity + delta * seconds_elapsed;
-	velocity = velocity - velocity * 0.1;
+	velocity = velocity - velocity * 2.8 * seconds_elapsed;
 	target = position + velocity * seconds_elapsed;
 
 	/**IS VALID POSITION?**/
@@ -438,15 +438,15 @@ Gun::Gun(Vector3 _pos, int _bullets, sProp* _prop) : EntityMesh(_prop)
 	switch (_prop->index)
 	{
 		case REVOLVER:
-			scope = 2;
+			scope = 0.5;
 			damage = 15;
 			break;
 		case SHOTGUN:
-			scope = 1;
+			scope = 0.25;
 			damage = 30;
 			break;
 		case MICROGUN:
-			scope = 10;
+			scope = 2;
 			damage = 5;
 			break;
 		default:
@@ -463,7 +463,7 @@ Character::Character(sProp* _prop, Vector3 _pos, float _health, Vector3* _player
 	health = _health;
 	velocity = Vector3();
 	player_position = _player_position;
-	speed = 75;
+	speed = 50;
 	model.setTranslation(position.x, position.y, position.z);
 	angle = 0;
 	isSaved = false;
@@ -579,7 +579,7 @@ void Character::update(double seconds_elapsed)
 		angle = *angle_player + 180;
 	}
 
-	velocity = velocity - velocity * 0.2;
+	velocity = velocity - velocity * 2.8 * seconds_elapsed;
 	position = position + velocity * seconds_elapsed;
 
 	model.setTranslation(position.x + 3, position.y, position.z + 3);

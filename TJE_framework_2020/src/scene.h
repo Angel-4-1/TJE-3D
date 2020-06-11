@@ -29,7 +29,7 @@ public:
 
 	static Scene* getInstance();
 
-	void updateAspas();
+	void updateAspas(float seconds_elapsed = 1);
 	void addAspas(Matrix44* aspaMatrix);
 	void initAspas();
 };
