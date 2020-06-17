@@ -27,7 +27,7 @@ struct sHitMark {
 	float ttl;
 };
 
-enum eTolerance { LOW = 8, MEDIUM = 6, HIGH = 4 };
+enum eTolerance { LOW = 7, MEDIUM = 5, HIGH = 2 };
 
 class BulletManager
 {
@@ -57,6 +57,8 @@ public:
 	
 	void hasCollisioned();
 	
+	void setTolerance(eTolerance _tolerance);
+
 	/****HIT MARKS****/
 	static const int MAX_HITS = 100;
 	//sHitMark hit_marks[MAX_HITS];

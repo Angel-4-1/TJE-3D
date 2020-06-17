@@ -11,7 +11,7 @@
 #include "animation.h"
 //#include "item.h"
 
-enum eType { EMPTY, PLAYER, CHARACTER, ENEMY = 4, HOUSE, TREE, WESTHOUSE, WESTHOUSE2 , TREE3, CACTUS, 
+enum eType { EMPTY, PLAYER, CHARACTER, HEART, ENEMY, HOUSE, TREE, WESTHOUSE, WESTHOUSE2 , TREE3, CACTUS, 
 	TIENDACAMP, TIENDACAMP2, ORANGEGRASS, TREE4, FIRE, MOUNTAIN, WESTHOUSE3, HOUSECORNER, WESTHOUSE4,
 	FENCE, FENCEBROKEN, FENCECURVE, FENCEDOOR,
 	BULLET, REVOLVER, SHOTGUN, MICROGUN,
@@ -71,7 +71,6 @@ public:
 	void onBulletCollision(Bullet* bullet);
 };
 
-
 class Gun : public EntityMesh
 {
 public:
@@ -93,9 +92,14 @@ public:
 	bool hasGun;
 	bool isHit;
 	float health;
+	float max_health;
 	float when_was_hitted;
 
+	enum eGunType { REVOLVER_GUN, SHOTGUN_GUN, MICROGUN_GUN };
 	Gun* gun;
+	int current_gun;	//index of the array which gun points to
+	static const int MAX_GUNS = 3;
+	Gun* guns[MAX_GUNS];
 
 	enum eAnim { STAND_UP, IDLE, WALK, RUN, SHOOT_NOT_MOVING, SHOOT_MOVING, HIT, DEAD };
 	static const int MAX_ANIMATIONS = 10;
@@ -115,6 +119,8 @@ public:
 	void onBulletCollision(Bullet* bullet);
 
 	void pickGun(Entity* ent, sProp* prop);
+	void changeGun();
+	void pickHeart(Entity* ent, sProp* prop);
 	void dropGun();
 };
 

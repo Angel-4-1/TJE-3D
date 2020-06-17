@@ -6,6 +6,7 @@
 #include "light.h"
 #include "bulletmanager.h"
 #include "game.h"
+#include "audio.h"
 
 /**********ENTITY*********/
 Entity::Entity()
@@ -163,6 +164,7 @@ Player::Player(sProp* _prop, float _health) : EntityMesh(_prop)
 	isHit = false;
 	when_was_hitted = 0;
 	health = _health;
+	max_health = _health;
 
 	gun = NULL;
 
@@ -178,6 +180,11 @@ Player::Player(sProp* _prop, float _health) : EntityMesh(_prop)
 	animations[SHOOT_MOVING] = Animation::Get("data/characters/animation/shoot_moving.skanim"); //angle = -90
 	animations[HIT] = Animation::Get("data/characters/animation/hit_reaction.skanim");
 	animations[DEAD] = Animation::Get("data/characters/animation/dyingfront.skanim");
+
+	for (int i = 0; i < MAX_GUNS; i++) {
+		guns[i] = NULL;
+	}
+	current_gun = 0;
 }
 
 void Player::selectSkeleton(float time)
@@ -334,7 +341,7 @@ void Player::update(double seconds_elapsed)
 	if (Input::isKeyPressed(SDL_SCANCODE_D)) { delta = delta + right; angle += speed_turn; }
 
 	velocity = velocity + delta * seconds_elapsed;
-	velocity = velocity - velocity * 2.8 * seconds_elapsed;
+	velocity = velocity - velocity * 3.5 * seconds_elapsed;
 	target = position + velocity * seconds_elapsed;
 
 	/**IS VALID POSITION?**/
@@ -365,6 +372,11 @@ void Player::update(double seconds_elapsed)
 
 		if (ent->type == REVOLVER || ent->type == SHOTGUN || ent->type == MICROGUN) {
 			pickGun(ent, &map->prototypes[(int)ent->type]);
+			break;
+		}
+
+		if (ent->type == HEART) {
+			pickHeart(ent, &map->prototypes[(int)ent->type]);
 			break;
 		}
 
@@ -417,9 +429,85 @@ void Player::onBulletCollision(Bullet* bullet)
 
 void Player::pickGun(Entity* ent, sProp* prop)
 {
-		hasGun = true;
-		ent->type = EMPTY;
-		gun = new Gun(ent->getPosition(), 100, prop);
+	int gun_pos = -1;
+	switch (ent->type)
+	{
+		case REVOLVER:
+			gun_pos = (int)REVOLVER_GUN;
+			break;
+		case SHOTGUN:
+			gun_pos = (int)SHOTGUN_GUN;
+			break;
+		case MICROGUN:
+			gun_pos = (int)MICROGUN_GUN;
+			break;
+		default:
+			break;
+	}
+
+	//check if it is a valid position of the array
+	//remember: array guns has the following valid positions
+	// guns[0] = guns[REVOLVER_GUN] --> store revolver
+	// guns[1] = guns[SHOTGUN_GUN]  --> store shotgun
+	// guns[2] = guns[MICROGUN_GUN] --> stroe microgun
+	if (gun_pos >= 0 && gun_pos < MAX_GUNS) {
+		if (hasGun && guns[gun_pos] != NULL) {
+			guns[gun_pos]->num_bullets += 40;
+			gun = guns[gun_pos];
+		}
+		else {
+			hasGun = true;
+			guns[gun_pos] = new Gun(ent->getPosition(), 40, prop);
+			gun = guns[gun_pos];
+		}
+		current_gun = gun_pos;
+	}
+	ent->type = EMPTY;
+}
+
+void Player::changeGun()
+{
+	if (hasGun == false) { return; }
+
+	int target_gun = current_gun;
+
+	bool found = false;
+	//look if the player has more guns
+	for (int i = 0; i < MAX_GUNS; i++) {
+		target_gun += 1;
+		if ((target_gun >= 0 && target_gun < MAX_GUNS) && guns[target_gun] != NULL) {
+			//select next gun
+			gun = guns[target_gun];
+			current_gun = target_gun;
+			found = true;
+			break;
+		}
+	}
+
+	if (found == false)
+	{
+		//init the cycle and try to find a possible candidate
+		target_gun = 0;
+		for (int i = 0; i < MAX_GUNS; i++) {
+			if ((target_gun >= 0 && target_gun < MAX_GUNS && target_gun != current_gun) && guns[target_gun] != NULL) {
+				//select next gun
+				gun = guns[target_gun];
+				current_gun = target_gun;
+				found = true;
+				break;
+			}
+			target_gun += 1;
+		}
+	}
+
+}
+
+void Player::pickHeart(Entity* ent, sProp* prop)
+{
+	health = max_health;
+	ent->type = EMPTY;
+	Audio* audio = Audio::Get("data/audio/healthUp.wav");
+	audio->playSound();
 }
 
 void Player::dropGun()

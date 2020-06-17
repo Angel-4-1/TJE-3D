@@ -35,6 +35,7 @@ Character* ch = NULL;
 // Stages
 Stage* current_stage = NULL;
 IntroStage* intro_stage = NULL;
+TutorialStage* tutorial_stage = NULL;
 EditorStage* editor_stage = NULL;
 PlayStage* play_stage = NULL;
 PauseStage* pause_stage = NULL;
@@ -148,10 +149,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//init stages
 	intro_stage = new IntroStage();
+	tutorial_stage = new TutorialStage();
 	editor_stage = new EditorStage(plane);
 	play_stage = new PlayStage(player, camera, &free_cam, sky, plane, ch);
 	pause_stage = new PauseStage(play_stage);
-	final_stage = new FinalStage();
+	final_stage = new FinalStage(play_stage);
 	current_stage = intro_stage;
 }
 
@@ -231,7 +233,7 @@ void Game::changeState()
 		free_cam = true;
 		break;
 	case sType::TUTORIAL_STAGE:
-		//current_stage = tutorial_stage;
+		current_stage = tutorial_stage;
 		break;
 	case sType::EDITOR_STAGE:
 		editor_stage->previous_stage_type = current_stage->whoAmI();
@@ -259,6 +261,12 @@ void Game::changeState()
 	case sType::GAMEOVER_STAGE:
 		final_stage->changeWin(false);
 		current_stage = final_stage;
+		
+		final_stage->ps_fxshader = final_stage->play_stage->fxshader;
+		final_stage->play_stage->active_fbo = true;
+		final_stage->play_stage->selected = eOptionPlay::GAMEOVER_PLAY;
+		final_stage->play_stage->fxshader = final_stage->fxshader;
+		free_cam = false;
 		break;
 	case sType::EXIT_STAGE:	// Exit the game
 		must_exit = true;
@@ -279,9 +287,6 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 		case SDLK_1: current_stage = intro_stage; free_cam = true; intro_stage->selected = eOptionIntro::NONE_INTRO; break;
 		case SDLK_2: current_stage = editor_stage; free_cam = true; break;
 		case SDLK_3: current_stage = play_stage; free_cam = false; break;
-	//	case SDLK_9:	//save scene to a text file
-	//		gamemap->saveMap(); 
-	//		break;
 	}
 }
 

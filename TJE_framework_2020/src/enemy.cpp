@@ -5,6 +5,7 @@
 #include "gamemap.h"
 #include "scene.h"
 #include "bulletmanager.h"
+#include "game.h"
 
 EnemyManager* EnemyManager::instance = NULL;
 
@@ -97,7 +98,8 @@ void EnemyManager::render(float time)
 void EnemyManager::update(double seconds_elapsed)
 {
 	BulletManager* bm = BulletManager::getInstance();
-	
+	float time = Game::instance->time;
+
 	for (int i = 0; i < MAX_ENEMIES; i++)
 	{
 		sEnemy* enemy = &enemies[i];
@@ -123,15 +125,48 @@ void EnemyManager::update(double seconds_elapsed)
 				if (FdotT > 0.5) {
 					float angle = acos(FdotT) * RAD2DEG;
 					if (abs(enemy->angle - angle) >= 5) { enemy->angle = angle; }	//to not change a lot the enemy angle
-					bm->createBullet(pos, to_target * 20, 5.0, enemy->bullet_damage, eAuthor::ENEMY_BULLET, 1, angle);
+					if (time - enemy->previous_time_shot >= 0.5) {
+						enemy->previous_time_shot = time;
+						bm->createBullet(pos, to_target * 15000 * seconds_elapsed, 10.0, enemy->bullet_damage, eAuthor::ENEMY_BULLET, 1, angle);
+					}
 					//update position
 					enemy->velocity = to_target * 5;
 					enemy->position = enemy->position + enemy->velocity * seconds_elapsed;
 				}
 			}
 			else {
-				// look for the player
+				/*****LOOK FOR THE PLAYER*****
+				GameMap* map = GameMap::getInstance();
+				std::vector<Entity*> world_enitities = Scene::getInstance()->root.children;
+				//test with the entities of the scene
+				bool collided = false;
+				Vector3 center = enemy->position + Vector3(0, 1, 0);
+
+				for (int i = 0; i < world_enitities.size(); i++)
+				{
+					Entity* ent = world_enitities[i];
+					if (ent->type == EMPTY)
+						continue;
+
+					Mesh* mesh = map->prototypes[(int)ent->type].mesh;
+
+					Vector3 collision;	//point of collision
+					Vector3 collision_normal;
+
+					//test collision
+					if (mesh->testSphereCollision(ent->model, center, 1 / 3.0, collision, collision_normal) == false) {
+						continue;
+					}
+
+					collided = true;
+					enemy->velocity = enemy->velocity * Vector3(random(5), 0, random(5));
+					break;
+				}
+
+				enemy->position = enemy->position + enemy->velocity * seconds_elapsed;
+				*/
 			}
+			
 
 			if (enemy->health <= 0.0)
 			{
@@ -171,6 +206,7 @@ void sEnemy::setEnemyValues(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, fl
 	isActive = _isActive;
 	prop = _prop;
 	isDead = false;
+	previous_time_shot = 0;
 }
 
 void sEnemy::setEnemyValues(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, float _speed, float _health, float _bullet_damage, float _angle, bool _isActive)
@@ -184,6 +220,7 @@ void sEnemy::setEnemyValues(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, fl
 	angle = _angle;
 	isActive = _isActive;
 	isDead = false;
+	previous_time_shot = 0;
 }
 
 void EnemyManager::selectSkeleton(sEnemy* enemy, float time)
@@ -229,6 +266,11 @@ void EnemyManager::onBulletCollision(Bullet* bullet, sEnemy* enemy, Vector3 poin
 
 	//bullet impact afect a bit the position of the enemy
 	enemy->position = enemy->position + bullet->velocity * 0.01;
+}
+
+void EnemyManager::resetEnemies()
+{
+	initEnemies();
 }
 
 void EnemyManager::setDifficulty(eDifficultyEnemy diff, Vector3* _player_pos)

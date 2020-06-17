@@ -14,6 +14,7 @@ struct sEnemy {
 	float health;
 	float bullet_damage;
 	float angle;
+	float previous_time_shot;	//las time the enemy shot a bullet
 	bool isActive;
 	bool isDead;
 	sProp* prop;
@@ -54,7 +55,7 @@ public:
 	void createEnemy(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, float _speed, float _life, float _bullet_damage, float _angle);
 	void selectSkeleton(sEnemy* enemy, float time = 0);
 	void onBulletCollision(Bullet* bullet, sEnemy* enemy, Vector3 point_collision);
-
+	void resetEnemies();
 	void setDifficulty(eDifficultyEnemy diff, Vector3* _player_pos);
 };
 #endif

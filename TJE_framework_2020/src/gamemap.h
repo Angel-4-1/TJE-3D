@@ -21,7 +21,7 @@ public:
 	void saveMap();
 	void saveEntity(FILE* filename, Entity* ent);
 	void saveEnemies(FILE* filename, EnemyManager* enemy_manager);
-
+	void reLoadMap(const char* filename);
 	void createBasicMap();
 };
 

@@ -56,6 +56,30 @@ public:
 	void onKeyDown(SDL_KeyboardEvent event);
 };
 
+enum eOptionTutorial { NONE_TUTORIAL, EASY_TUTORIAL, MEDIUM_TUTORIAL, HARD_TUTORIAL, CONTINUE_TUTORIAL };
+
+class TutorialStage : public Stage
+{
+public:
+	static const int NUM_OPTIONS = 5;
+	eOptionTutorial selected = NONE_TUTORIAL;
+
+	Vector4 menu_atlas[NUM_OPTIONS] = {
+		{0, 0, 0, 0},					// none
+		{0, 0, 0.125 * 4, 0.125},		// easy
+		{0, 0.125, 0.125 * 4, 0.125},	// medium
+		{0, 0.125 * 2, 0.125 * 4, 0.125},	// hard
+		{0, 0.125 * 3, 0.125 * 5, 0.125},	// continue
+	};
+
+	Texture* texture_atlas;
+	Shader* shader;
+
+	TutorialStage();
+
+	void render(void);
+};
+
 enum eOptionEditor { NONE_EDITOR, PLANE_EDITOR, RETURN_EDITOR, SAVE_EDITOR };
 
 class EditorStage : public Stage
@@ -104,12 +128,12 @@ public:
 	void selectEntity();
 };
 
-enum eOptionPlay { NONE_PLAY, PAUSE_PLAY };
+enum eOptionPlay { NONE_PLAY, PAUSE_PLAY, FACE_PLAY, EMPTYBAR_PLAY, BAR1_PLAY, BAR2_PLAY, BAR3_PLAY, BAR4_PLAY, BAR5_PLAY, BAR6_PLAY, SHOTGUN_PLAY, REVOLVER_PLAY, MICROGUN_PLAY, GAMEOVER_PLAY };
 
 class PlayStage : public Stage
 {
 public:
-	static const int NUM_OPTIONS = 10;
+	static const int NUM_OPTIONS = 15;
 	static const int NUM_OPTIONS_CONTROLS = 6;
 
 	eOptionPlay selected = NONE_PLAY;
@@ -117,6 +141,17 @@ public:
 	Vector4 menu_atlas[NUM_OPTIONS] = {
 		{0, 0, 0, 0},					// none
 		{0, 0, 0.125, 0.125},		// pause
+		{0, 0.125 * 2, 0.125 * 2, 0.125 * 2},	// face
+		{0.125 * 3, 0.125, 0.125 * 3, 0.1},	// empty bar
+		{0.125 * 3, 0.125 * 2, 0.125 * 3, 0.1},	// bar 1
+		{0.125 * 3, 0.125 * 3, 0.125 * 3, 0.1},	// bar 2
+		{0.125 * 3, 0.125 * 4, 0.125 * 3, 0.1},	// bar 3
+		{0.125 * 3, 0.125 * 5, 0.125 * 3, 0.1},	// bar 4
+		{0.125 * 3, 0.125 * 6, 0.125 * 3, 0.1},	// bar 5
+		{0.125 * 3, 0.125 * 7, 0.125 * 3, 0.1},	// bar 6
+		{0, 0.125 * 5, 0.125, 0.125},	// shotgun icon
+		{0.125, 0.125 * 5, 0.125, 0.125},	// revolver icon
+		{0, 0.125 * 6, 0.125, 0.125},	// microgun icon
 	};
 	Texture* texture_atlas;
 
@@ -130,6 +165,7 @@ public:
 	SkyBox* sky;
 	Mesh* plane;
 	Shader* fxshader;	//fbo shader
+	bool has_shot;
 
 	HCHANNEL channel_ambient;
 	float volume_ambient;
@@ -141,21 +177,25 @@ public:
 	void renderWithFBO(void);
 	void renderWorld(void);
 
+	void renderGUIHealth(float window_centerx, float aspect);
+	void renderGUIWeapon(float window_centerx, float aspect);
 	void saveCharacter();
 	
 	void update(double seconds_elapsed);
 	void onKeyDown(SDL_KeyboardEvent event);
 	void onKeyUp(SDL_KeyboardEvent event);
+
+	void resetGame();
 };
 
 enum eOptionPause { NONE_PAUSE, EDITOR_PAUSE, CONTROLS_PAUSE, RETURN_PAUSE, EXIT_PAUSE, TITLE_PAUSE, MUSIC_PAUSE, MUSIC_HIGH_PAUSE, MUSIC_LOW_PAUSE, MUSIC_BAR_PAUSE };
-enum eOptionControls { NONE_CONTROLS, MOVE_CONTROLS, SHOOT_CONTROLS, RUN_CONTROLS, TITLE_CONTROLS, RETURN_CONTROLS };
+enum eOptionControls { NONE_CONTROLS, MOVE_CONTROLS, SHOOT_CONTROLS, RUN_CONTROLS, TITLE_CONTROLS, RETURN_CONTROLS, CHANGE_CONTROLS };
 
 class PauseStage : public Stage
 {
 public:
 	static const int NUM_OPTIONS = 10;
-	static const int NUM_OPTIONS_CONTROLS = 6;
+	static const int NUM_OPTIONS_CONTROLS = 7;
 	
 	eOptionPause selected = NONE_PAUSE;
 
@@ -176,9 +216,10 @@ public:
 		{0, 0, 0, 0},					// none
 		{0, 0, 0.125 * 8, 0.125 * 2},		// move
 		{0, 0.125 * 2, 0.125 * 7, 0.125},	// shoot
-		{0, 0.125 * 3, 0.125 * 5, 0.125},	// run
+		{0, 0.125 * 3, 0.125 * 6, 0.125},	// run
 		{0, 0.125 * 4, 0.125 * 6, 0.125 * 2},	// title
 		{0, 0.125 * 6, 0.125 * 5, 0.125},	// return
+		{0, 0.125 * 7, 0.125 * 6, 0.125},	// change gun
 	};
 
 	PlayStage* play_stage;	//to be able to render the world on the backgroud
@@ -199,12 +240,30 @@ public:
 	void onKeyDown(SDL_KeyboardEvent event);
 };
 
+enum eOptionGameOver { NONE_GAMEOVER, TRYAGAIN_GAMEOVER, EXIT_GAMEOVER, TEXT_GAMEOVER };
+
 class FinalStage : public Stage
 {
 public:
 	bool isWin;
+	float factor;
+	PlayStage* play_stage;
+	Shader* fxshader;	//fbo shader
+	Shader* ps_fxshader;	//fbo shader of play stage
 
-	FinalStage();
+	static const int NUM_OPTIONS = 5;
+
+	Texture* texture_atlas_gameover;
+	eOptionGameOver selected = NONE_GAMEOVER;
+
+	Vector4 menu_atlas[NUM_OPTIONS] = {
+		{0, 0, 0, 0},					// none
+		{0, 0, 0.125 * 3, 0.125 * 2},		// try again
+		{0, 0.125 * 2, 0.125 * 3, 0.125},		// exit
+		{0, 0.125 * 4, 1, 0.125},		// text
+	};
+
+	FinalStage(PlayStage* _playstage);
 
 	// Depending on the value of isWin, render will call win or gameover
 	void render(void);
@@ -214,6 +273,8 @@ public:
 	void onKeyDown(SDL_KeyboardEvent event);
 
 	void changeWin(bool state);
+
+	void update(double seconds_elapsed);
 };
 
 #endif

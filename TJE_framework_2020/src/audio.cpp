@@ -73,8 +73,10 @@ Audio* Audio::Get(const char* filename)
 	
 	if (hsample == 0)
 	{
-		delete audio;
-		return 0;
+		//instead of returning a NULL pointer, return an audio with hsample = 0
+		//that way the app will not crash if the audio is not found
+		audio->sample = 0;
+		return audio;
 	}
 
 	audio->sample = hsample;

@@ -22,8 +22,11 @@ public:
 
 	//trees
 	static const int MAX_ASPAS = 30;
+	static const int MAX_ITEMS = 50;
 	
 	Matrix44* aspas[MAX_ASPAS];
+	Matrix44* items[MAX_ITEMS];
+
 	//pool of trees
 	//Bullet bullets[MAX_BULLETS];
 
@@ -32,6 +35,12 @@ public:
 	void updateAspas(float seconds_elapsed = 1);
 	void addAspas(Matrix44* aspaMatrix);
 	void initAspas();
+
+	void updateItems(float seconds_elapsed = 1);
+	void addItems(Matrix44* itemMatrix);
+	void initItems();
+
+	void resetScene();
 };
 
 #endif

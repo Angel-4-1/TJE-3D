@@ -131,6 +131,11 @@ GameMap::GameMap()
 	prototypes[(int)MICROGUN].index = MICROGUN;
 	prototypes[(int)MICROGUN].mesh = Mesh::Get("data/weapons/microgun.OBJ");
 	prototypes[(int)MICROGUN].texture = Texture::Get("data/weapons/microgun.tga");
+
+	/*******ITEM^S*******/
+	prototypes[(int)HEART].index = HEART;
+	prototypes[(int)HEART].mesh = Mesh::Get("data/items/heart.OBJ");
+	prototypes[(int)HEART].texture = Texture::Get("data/items/heart.tga");
 }
 
 
@@ -157,7 +162,6 @@ bool GameMap::loadMap(const char* filename)
 	int num_elements = 4;
 	int obtained = 0;
 	Scene* scene = Scene::getInstance();
-	scene->initAspas();
 
 	//get enemy manager for creating the enemies
 	EnemyManager* enemy_manager = EnemyManager::getInstance();
@@ -213,6 +217,7 @@ bool GameMap::loadMap(const char* filename)
 			sProp* prop = &prototypes[type];	//prototype which contains info about its mesh, texture and shader
 
 			if (prop->index == ENEMY) {
+				//enemy_manager->createEnemy(Vector3(x, y, z), Vector3(random(5), 0, random(5)), NULL, 10, 50, 1, 0);
 				enemy_manager->createEnemy(Vector3(x, y, z), Vector3(0, 0, 0), NULL, 10, 50, 1, 0);
 			}
 			else {
@@ -231,6 +236,9 @@ bool GameMap::loadMap(const char* filename)
 				obtained = 0;
 				if (ent->prop->index == ASPA) {
 					scene->addAspas(&ent->model);
+				}
+				else if (ent->prop->index == HEART || ent->prop->index == REVOLVER || ent->prop->index == SHOTGUN || ent->prop->index == MICROGUN) {
+					scene->addItems(&ent->model);
 				}
 			}
 		}
@@ -319,6 +327,13 @@ void GameMap::saveEnemies(FILE* filename, EnemyManager* enemy_manager) {
 		fprintf(filename, "ROTATION %f ", rotation);
 		fprintf(filename, "SCALE %f \n", scale);
 	}
+}
+
+void GameMap::reLoadMap(const char* filename)
+{
+	delete(instance);
+	instance = new GameMap();
+	loadMap(filename);
 }
 
 //create a basic map just in case the map file does not exist

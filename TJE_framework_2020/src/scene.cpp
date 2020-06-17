@@ -2,7 +2,7 @@
 
 Scene* Scene::instance = NULL;
 
-Scene::Scene() { }
+Scene::Scene() { initAspas(); initItems(); }
 
 Scene* Scene::getInstance()
 {
@@ -26,13 +26,6 @@ void Scene::updateAspas(float seconds_elapsed)
 	}
 }
 
-void Scene::initAspas()
-{
-	for (int i = 0; i < MAX_ASPAS; i++) {
-		aspas[i] = NULL;
-	}
-}
-
 void Scene::addAspas(Matrix44* aspaMatrix)
 {
 	for (int i = 0; i < MAX_ASPAS; i++) {
@@ -43,3 +36,56 @@ void Scene::addAspas(Matrix44* aspaMatrix)
 		break;
 	}
 }
+
+void Scene::initAspas()
+{
+	for (int i = 0; i < MAX_ASPAS; i++) {
+		aspas[i] = NULL;
+	}
+}
+
+void Scene::updateItems(float seconds_elapsed)
+{
+	for (int i = 0; i < MAX_ITEMS; i++) {
+		if (items[i] == NULL)
+			continue;
+
+		Matrix44* item = items[i];
+		Vector3 pos = item->getTranslation();
+		item->rotate((75 * seconds_elapsed) * DEG2RAD, Vector3(0, 1, 0));
+	}
+}
+
+void Scene::addItems(Matrix44* itemMatrix)
+{
+	for (int i = 0; i < MAX_ITEMS; i++) {
+		if (items[i] != NULL) {
+			continue;
+		}
+		items[i] = itemMatrix;
+		break;
+	}
+}
+
+void Scene::initItems()
+{
+	for (int i = 0; i < MAX_ITEMS; i++) {
+		items[i] = NULL;
+	}
+}
+
+void Scene::resetScene()
+{
+	initAspas();
+	delete(tree);
+	tree = new Tree();
+	delete(light);
+	light = new Light();
+	light->diffuse_color.set(1, 1, 1);
+	light->specular_color.set(1, 1, 1);
+	light->position.set(-300, 80, 420);
+	delete(instance);
+	instance = new Scene();
+}
+
+

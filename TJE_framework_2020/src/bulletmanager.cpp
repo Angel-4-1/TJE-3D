@@ -194,6 +194,11 @@ void BulletManager::hasCollisioned()
 	}
 }
 
+void BulletManager::setTolerance(eTolerance _tolerance)
+{
+	tolerance = _tolerance;
+}
+
 //set values to the bullet
 void Bullet::setBulletValues(Vector3 _pos, Vector3 _vel, float _ttl, float _power, eAuthor _author, int _type, float _angle, bool _isUsed)
 {
