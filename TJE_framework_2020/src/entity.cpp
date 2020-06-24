@@ -15,6 +15,7 @@ Entity::Entity()
 	type = EMPTY;
 	scale = 1.0;
 	angle = 0.0;
+	isActive = true;
 }
 
 Entity::Entity(eType _type)
@@ -23,6 +24,7 @@ Entity::Entity(eType _type)
 	type = _type;
 	scale = 1.0;
 	angle = 0.0;
+	isActive = true;
 }
 
 Entity::~Entity()
@@ -96,7 +98,7 @@ EntityMesh::EntityMesh(sProp* _prop) : Entity(_prop->index)
 
 void EntityMesh::render()
 {
-	if (type == EMPTY)
+	if (type == EMPTY || isActive == false)
 		return;	
 
 	Mesh* mesh = prop->mesh;
@@ -357,7 +359,7 @@ void Player::update(double seconds_elapsed)
 	for (int i = 0; i < world_enitities.size(); i++) 
 	{
 		Entity* ent = world_enitities[i];
-		if (ent->type == PLAYER || ent->type == EMPTY)
+		if (ent->type == PLAYER || ent->type == EMPTY || ent->isActive == false)
 			continue;
 
 		Mesh* mesh = map->prototypes[(int)ent->type].mesh;
@@ -461,8 +463,11 @@ void Player::pickGun(Entity* ent, sProp* prop)
 			gun = guns[gun_pos];
 		}
 		current_gun = gun_pos;
+		Audio* pick = Audio::Get("data/audio/collect.wav");
+		pick->playSound();
 	}
-	ent->type = EMPTY;
+	//ent->type = EMPTY;
+	ent->isActive = false;
 }
 
 void Player::changeGun()
@@ -505,7 +510,7 @@ void Player::changeGun()
 void Player::pickHeart(Entity* ent, sProp* prop)
 {
 	health = max_health;
-	ent->type = EMPTY;
+	ent->isActive = false;
 	Audio* audio = Audio::Get("data/audio/healthUp.wav");
 	audio->playSound();
 }
@@ -520,8 +525,6 @@ Gun::Gun(Vector3 _pos, int _bullets, sProp* _prop) : EntityMesh(_prop)
 	position = _pos;
 	position.y = 1;
 	num_bullets = _bullets;
-	//scope = _scope;
-	//damage = _damage;
 
 	switch (_prop->index)
 	{

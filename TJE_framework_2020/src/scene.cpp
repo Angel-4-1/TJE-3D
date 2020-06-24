@@ -76,16 +76,14 @@ void Scene::initItems()
 
 void Scene::resetScene()
 {
-	initAspas();
-	delete(tree);
-	tree = new Tree();
-	delete(light);
-	light = new Light();
-	light->diffuse_color.set(1, 1, 1);
-	light->specular_color.set(1, 1, 1);
-	light->position.set(-300, 80, 420);
-	delete(instance);
-	instance = new Scene();
+	for (int i = 0; i < root.children.size(); i++)
+	{
+		Entity* ent = root.children[i];
+		if (ent->type == EMPTY || ent == NULL)
+			continue;
+
+		ent->isActive = true;
+	}
 }
 
 

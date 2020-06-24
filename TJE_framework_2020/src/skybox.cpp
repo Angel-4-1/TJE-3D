@@ -4,14 +4,13 @@ SkyBox::SkyBox()
 {
     skyShader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
     
-    texture = new Texture();
+    texture = Texture::Get("data/sky/skybox.png");
     cube = Mesh::Get("data/sky/boxsky3.obj");
 }
 
 void SkyBox::render(Matrix44 viewprojection) {
 	//glDisable(GL_CULL_FACE);
 	int size = 512;
-	texture = Texture::Get("data/sky/skybox.png");
 
 	Camera* camera = Camera::current;
 	Matrix44 m;

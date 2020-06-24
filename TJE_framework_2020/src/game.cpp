@@ -34,6 +34,7 @@ Character* ch = NULL;
 
 // Stages
 Stage* current_stage = NULL;
+LoadingStage* loading_stage = NULL;
 IntroStage* intro_stage = NULL;
 TutorialStage* tutorial_stage = NULL;
 EditorStage* editor_stage = NULL;
@@ -92,11 +93,13 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	/*******CREATE THE WORLD*******/
 	//get instance of the scene
-	scene = Scene::getInstance();
-	scene->tree = new Tree();
+	//scene = Scene::getInstance();
+	//scene->tree = new Tree();
 
 	//load the map
-	gamemap = new GameMap();
+	/*
+	gamemap = GameMap::getInstance();
+	
 	bool isLoaded = false;
 	isLoaded = gamemap->loadMap("data/mymap.txt");
 
@@ -104,57 +107,48 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	if (isLoaded == false) {
 		gamemap->createBasicMap();
 	}
+	*/
 
 	//create the player
-	player = new Player(&gamemap->prototypes[(int)PLAYER], 200);
-	scene->player = player;
+	//player = new Player(&gamemap->prototypes[(int)PLAYER], 200);
+	//scene->player = player;
 
 	//skybox for simulating the sky
-	sky = new SkyBox();
+	//sky = new SkyBox();
 
 	//plane
-	plane = new Mesh();
-	plane->createPlane(512);	//size in units --> each pixel of the image is 1 unit in our world
+	//plane = new Mesh();
+	//plane->createPlane(512);	//size in units --> each pixel of the image is 1 unit in our world
 								//centered in 0,0
-	plane_text = Texture::Get("data/plane.png");
-	
-	//Grass instanced
+	//plane_text = Texture::Get("data/plane.png");
+
+	//fbo = new FBO();
+	//fbo->create(window_width, window_height);
+
 	/*
-	for (int i = 0; i < 1000; i++)
-	{
-		Matrix44 m;
-		m.setTranslation(random(128), 0, random(128));
-		m.rotate(random(180) * DEG2RAD, Vector3(0, 1, 0));
-		m.scale(10, 10, 10);
-		grass.push_back(m);
-		//EntityMesh* gra = new EntityMesh(&gamemap->prototypes[(int)ORANGEGRASS]);
-		//gra->model = m;
-		//scene->tree->addTree(gra);
-	}*/
-
-	fbo = new FBO();
-	fbo->create(window_width, window_height);
-
 	scene->light = new Light();
 	scene->light->diffuse_color.set(1, 1, 1);
 	scene->light->specular_color.set(1, 1, 1);
 	scene->light->position.set(-300, 80, 420);
+	*/
 
 	//prepare bullets and the enemies
-	bulletmanger = BulletManager::getInstance();
-	enemymanager = EnemyManager::getInstance();
+	//bulletmanger = BulletManager::getInstance();
+	//enemymanager = EnemyManager::getInstance();
 	//enemymanager->createEnemy(Vector3(-300, 0, 400), Vector3(0, 0, 0), &player->position, 10, 50, 1, 0);
-	enemymanager->setDifficulty(eDifficultyEnemy::EASY_ENEMY, &player->position);
-	ch = new Character(&gamemap->prototypes[(int)CHARACTER], Vector3(-200, 0, 400), 10, &player->position);
+	//enemymanager->setDifficulty(eDifficultyEnemy::EASY_ENEMY, &player->position);
+	//ch = new Character(&gamemap->prototypes[(int)CHARACTER], Vector3(-200, 0, 400), 10, &player->position);
 
 	//init stages
-	intro_stage = new IntroStage();
-	tutorial_stage = new TutorialStage();
-	editor_stage = new EditorStage(plane);
-	play_stage = new PlayStage(player, camera, &free_cam, sky, plane, ch);
-	pause_stage = new PauseStage(play_stage);
-	final_stage = new FinalStage(play_stage);
-	current_stage = intro_stage;
+	loading_stage = new LoadingStage();
+	//intro_stage = new IntroStage();
+	//tutorial_stage = new TutorialStage(&player->position);
+	//editor_stage = new EditorStage(plane);
+	//play_stage = new PlayStage(player, camera, &free_cam, sky, plane, ch);
+	//pause_stage = new PauseStage(play_stage);
+	//final_stage = new FinalStage(play_stage);
+	current_stage = loading_stage;
+	//current_stage = intro_stage;
 }
 
 //what to do when the image has to be draw
@@ -202,14 +196,6 @@ void Game::update(double seconds_elapsed)
 		if (Input::isKeyPressed(SDL_SCANCODE_T)) camera->move(Vector3(0.0f, -1.0f, 0.0f) * speed);
 	}
 
-	//Light position
-	//if (Input::isKeyPressed(SDL_SCANCODE_Z)) scene->light->position = scene->light->position + Vector3(1, 0, 0);
-	//if (Input::isKeyPressed(SDL_SCANCODE_X)) scene->light->position = scene->light->position + Vector3(-1, 0, 0);
-	//if (Input::isKeyPressed(SDL_SCANCODE_C)) scene->light->position = scene->light->position + Vector3(0, 1, 0);
-	//if (Input::isKeyPressed(SDL_SCANCODE_V)) scene->light->position = scene->light->position + Vector3(0, -1, 0);
-	//if (Input::isKeyPressed(SDL_SCANCODE_B)) scene->light->position = scene->light->position + Vector3(0, 0, 1);
-	//if (Input::isKeyPressed(SDL_SCANCODE_N)) scene->light->position = scene->light->position + Vector3(0, 0, -1);
-
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
 		Input::centerMouse();
@@ -227,15 +213,33 @@ void Game::changeState()
 	switch (current_stage->change_to)
 	{
 	case sType::INTRO_STAGE:
+		/***FIRST TIME***/
+		if (intro_stage == NULL) { 
+			player = loading_stage->player;
+			ch = loading_stage->ch;
+			plane = loading_stage->plane;
+			plane_text = loading_stage->plane_text;
+			sky = loading_stage->sky;
+			fbo = loading_stage->fbo;
+			intro_stage = new IntroStage(); 
+		}
+		if (tutorial_stage == NULL) { tutorial_stage = new TutorialStage(&player->position); }
+		if (editor_stage == NULL) { editor_stage = new EditorStage(plane); }
+		if (play_stage == NULL) { play_stage = new PlayStage(player, camera, &free_cam, sky, plane, ch); }
+		if (pause_stage == NULL) { pause_stage = new PauseStage(play_stage); }
+		if (final_stage == NULL) { final_stage = new FinalStage(play_stage); }
+		/****************/
 		// If we go back to the Intro stage that means that we are going to restart the game
 		intro_stage->selected = eOptionIntro::NONE_INTRO;
 		current_stage = intro_stage;
 		free_cam = true;
 		break;
 	case sType::TUTORIAL_STAGE:
+		tutorial_stage->selected = eOptionTutorial::NONE_TUTORIAL;
 		current_stage = tutorial_stage;
 		break;
 	case sType::EDITOR_STAGE:
+		camera->enable();
 		editor_stage->previous_stage_type = current_stage->whoAmI();
 		current_stage = editor_stage;
 		free_cam = true;
@@ -244,6 +248,13 @@ void Game::changeState()
 		current_stage = play_stage;
 		play_stage->selected = eOptionPlay::NONE_PLAY;
 		free_cam = false;
+		if (play_stage->hasStarted == false) {
+			play_stage->channel_ambient = play_stage->audio_ambient->playSound(0);
+			bool isDone = play_stage->changeVolume(0.2);
+			//change bars of pause according to the volume
+			if (isDone) { pause_stage->volume_bars = 2; }
+			play_stage->hasStarted = true;
+		}
 		break;
 	case sType::PAUSE_STAGE:
 		current_stage = pause_stage;
@@ -281,12 +292,20 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 
 	switch(event.keysym.sym)
 	{
-		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
+		case SDLK_ESCAPE: 
+			if (current_stage->whoAmI() != sType::INTRO_STAGE)
+			{
+				//reset play stage
+				play_stage->hasStarted = false;
+				play_stage->resetGame();
+				play_stage->audio_ambient->StopSound(play_stage->channel_ambient);
+				//change to intro stage
+				current_stage->change = true;
+				current_stage->change_to = sType::INTRO_STAGE;
+			}
+			break; //ESC key, kill the app
 		case SDLK_TAB: free_cam = !free_cam; break;
 		case SDLK_F1: Shader::ReloadAll(); break; 
-		case SDLK_1: current_stage = intro_stage; free_cam = true; intro_stage->selected = eOptionIntro::NONE_INTRO; break;
-		case SDLK_2: current_stage = editor_stage; free_cam = true; break;
-		case SDLK_3: current_stage = play_stage; free_cam = false; break;
 	}
 }
 

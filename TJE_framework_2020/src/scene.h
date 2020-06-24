@@ -27,9 +27,6 @@ public:
 	Matrix44* aspas[MAX_ASPAS];
 	Matrix44* items[MAX_ITEMS];
 
-	//pool of trees
-	//Bullet bullets[MAX_BULLETS];
-
 	static Scene* getInstance();
 
 	void updateAspas(float seconds_elapsed = 1);

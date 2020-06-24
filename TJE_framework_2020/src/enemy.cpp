@@ -12,6 +12,8 @@ EnemyManager* EnemyManager::instance = NULL;
 EnemyManager::EnemyManager() { 
 	initEnemies(); 
 
+	current_difficulty = EASY_ENEMY;
+
 	for (int i = 0; i < MAX_ANIMATIONS; i++) {
 		animations[i] = NULL;
 	}
@@ -95,6 +97,45 @@ void EnemyManager::render(float time)
 	}
 }
 
+//render enemies in a simplified version using instancing
+void EnemyManager::renderSimplified(Camera* camera, float _scale)
+{
+	vertices.clear();
+	for (int i = 0; i < MAX_ENEMIES; i++)
+	{
+		sEnemy* enemy = &enemies[i];
+
+		//only active enemies and not dead
+		if (enemy->isActive == false || enemy->isDead == true)
+			continue;
+
+		Matrix44 m;
+		m.setTranslation(enemy->position.x, enemy->position.y, enemy->position.z);
+		m.scale(_scale, _scale, _scale);
+		vertices.push_back(m);
+	}
+		
+	if (vertices.size() != 0) {
+		Mesh* sphere = Mesh::Get("data/sphere.obj");
+
+		Shader* shader_instanced = Shader::Get("data/shaders/instanced.vs", "data/shaders/flat.fs");
+		//enable shader
+		shader_instanced->enable();
+
+		//upload uniforms
+		shader_instanced->setUniform("u_color", Vector4(1, 0, 0, 1));
+		shader_instanced->setUniform("u_viewprojection", camera->viewprojection_matrix);
+		shader_instanced->setUniform("u_model", Matrix44());
+
+		shader_instanced->setUniform("u_camera_pos", camera->eye);
+
+		sphere->renderInstanced(GL_TRIANGLES, &vertices[0], vertices.size());
+
+		//disable shader
+		shader_instanced->disable();
+	}
+}
+
 void EnemyManager::update(double seconds_elapsed)
 {
 	BulletManager* bm = BulletManager::getInstance();
@@ -124,15 +165,19 @@ void EnemyManager::update(double seconds_elapsed)
 				float FdotT = clamp(front.dot(to_target), -1, 1);
 				if (FdotT > 0.5) {
 					float angle = acos(FdotT) * RAD2DEG;
-					if (abs(enemy->angle - angle) >= 5) { enemy->angle = angle; }	//to not change a lot the enemy angle
+					//if (abs(enemy->angle - angle) >= 5) { enemy->angle = angle; }	//to not change a lot the enemy angle
 					if (time - enemy->previous_time_shot >= 0.5) {
 						enemy->previous_time_shot = time;
-						bm->createBullet(pos, to_target * 15000 * seconds_elapsed, 10.0, enemy->bullet_damage, eAuthor::ENEMY_BULLET, 1, angle);
+						bm->createBullet(pos, to_target * 7500 * seconds_elapsed, 10.0, enemy->bullet_damage, eAuthor::ENEMY_BULLET, 1, angle);
 					}
 					//update position
 					enemy->velocity = to_target * 5;
 					enemy->position = enemy->position + enemy->velocity * seconds_elapsed;
 				}
+			}
+			else if (distanceWithPlayer <= 50.0) {
+				enemy->velocity = enemy->velocity * 0.9;
+				enemy->position = enemy->position + enemy->velocity * seconds_elapsed;
 			}
 			else {
 				/*****LOOK FOR THE PLAYER*****
@@ -197,12 +242,14 @@ void EnemyManager::createEnemy(Vector3 _pos, Vector3 _vel, Vector3* _player_pos,
 void sEnemy::setEnemyValues(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, float _speed, float _health, float _bullet_damage, float _angle, bool _isActive, sProp* _prop)
 {
 	position = _pos;
+	initial_position = _pos;
 	velocity = _vel;
 	player_position = _player_pos;
 	speed = _speed;
 	health = _health;
 	bullet_damage = _bullet_damage;
 	angle = _angle;
+	initial_angle = _angle;
 	isActive = _isActive;
 	prop = _prop;
 	isDead = false;
@@ -212,12 +259,14 @@ void sEnemy::setEnemyValues(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, fl
 void sEnemy::setEnemyValues(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, float _speed, float _health, float _bullet_damage, float _angle, bool _isActive)
 {
 	position = _pos;
+	initial_position = _pos;
 	velocity = _vel;
 	player_position = _player_pos;
 	speed = _speed;
 	health = _health;
 	bullet_damage = _bullet_damage;
 	angle = _angle;
+	initial_angle = _angle;
 	isActive = _isActive;
 	isDead = false;
 	previous_time_shot = 0;
@@ -241,12 +290,13 @@ void EnemyManager::selectSkeleton(sEnemy* enemy, float time)
 	float speed = enemy->velocity.length() * 0.1;
 
 	if (enemy->isDead == false) {
-		if (speed < 1) {
-			blendSkeleton(&idle->skeleton, &shoot->skeleton, speed, &enemy->result_skeleton);
-			//enemy->result_skeleton = idle->skeleton;
+		if (speed < 0.5) {
+			//blendSkeleton(&idle->skeleton, &shoot->skeleton, speed, &enemy->result_skeleton);
+			enemy->result_skeleton = idle->skeleton;
 		}
 		else {
-			blendSkeleton(&shoot->skeleton, &shoot_moving->skeleton, speed - 1, &enemy->result_skeleton);
+			//blendSkeleton(&idle->skeleton, &shoot_moving->skeleton, speed - 1, &enemy->result_skeleton);
+			enemy->result_skeleton = shoot_moving->skeleton;
 		}
 	}
 	else {
@@ -270,14 +320,44 @@ void EnemyManager::onBulletCollision(Bullet* bullet, sEnemy* enemy, Vector3 poin
 
 void EnemyManager::resetEnemies()
 {
-	initEnemies();
+	for (int i = 0; i < MAX_ENEMIES; i++)
+	{
+		sEnemy* enemy = &enemies[i];
+
+		if (enemy->isActive == false)
+			continue;
+
+		enemy->setEnemyValues(enemy->initial_position, Vector3(0, 0, 0), NULL, enemy->speed, 50, 10, enemy->initial_angle, true);
+	}
 }
 
 void EnemyManager::setDifficulty(eDifficultyEnemy diff, Vector3* _player_pos)
 {
 	//set values depending on the difficulty
-	//float _health;
-	//float _bullet_damage;
+	float _health = 10;
+	float _bullet_damage = 10;
+
+	//if diff = DEFAULT mantain difficulty otherwise update it
+	if (diff != DEFAULT_ENEMY) { current_difficulty = diff; }
+
+	//set values according to the difficulty
+	switch (current_difficulty)
+	{
+		case EASY_ENEMY:
+			_health = 50;
+			_bullet_damage = 5;
+			break;
+		case MEDIUM_ENEMY:
+			_health = 75;
+			_bullet_damage = 10;
+			break;
+		case HARD_ENEMY:
+			_health = 75;
+			_bullet_damage = 15;
+			break;
+		default:
+			break;
+	}
 
 	for (int i = 0; i < MAX_ENEMIES; i++)
 	{
@@ -287,5 +367,7 @@ void EnemyManager::setDifficulty(eDifficultyEnemy diff, Vector3* _player_pos)
 			continue;
 
 		enemy->player_position = _player_pos;
+		enemy->health = _health;
+		enemy->bullet_damage = _bullet_damage;
 	}
 }

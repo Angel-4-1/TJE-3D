@@ -37,7 +37,7 @@ void Audio::changeVolume(HCHANNEL hchannel, float volume)
 
 void Audio::StopSound(HCHANNEL channel)
 {
-	//BASS_SampleStop(sample);
+	BASS_ChannelStop(channel);
 }
 
 HSAMPLE Audio::load(const char* filename)	//HSAMPLE Audio::load()

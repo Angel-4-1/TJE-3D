@@ -7,7 +7,7 @@
 #include "skybox.h"
 #include "audio.h"
 
-enum sType { STAGE, INTRO_STAGE, TUTORIAL_STAGE, EDITOR_STAGE, PLAY_STAGE, PAUSE_STAGE, WIN_STAGE, GAMEOVER_STAGE, EXIT_STAGE };
+enum sType { NONE_STAGE, STAGE, LOADING_STAGE, INTRO_STAGE, TUTORIAL_STAGE, EDITOR_STAGE, PLAY_STAGE, PAUSE_STAGE, WIN_STAGE, GAMEOVER_STAGE, EXIT_STAGE };
 
 class Stage
 {
@@ -28,6 +28,31 @@ public:
 	//events
 	virtual void onKeyDown(SDL_KeyboardEvent event);
 	virtual void onKeyUp(SDL_KeyboardEvent event);
+};
+
+class LoadingStage : public Stage
+{
+public:
+	int loaded;
+	float total;
+	LoadingStage();
+
+	Player* player;
+	Character* ch;
+	Mesh* plane;
+	Texture* plane_text;
+	SkyBox* sky;
+	FBO* fbo;
+
+	void render(void);
+	void update(double seconds_elapsed);
+
+	void preloadMap();
+	void preloadScene();
+	void preloadItems();
+	void preloadAnimations();
+
+	void renderGUIPixels(float initx, float inity, float finalx, float finaly, Vector4 range, Texture* texture, Shader* shader);
 };
 
 enum eOptionIntro { NONE_INTRO, START_INTRO, EDITOR_INTRO, EXIT_INTRO, TITLE_INTRO };
@@ -75,7 +100,10 @@ public:
 	Texture* texture_atlas;
 	Shader* shader;
 
-	TutorialStage();
+	//we need the player position for the enemies
+	Vector3* player_position;
+
+	TutorialStage(Vector3* _player_position);
 
 	void render(void);
 };
@@ -166,6 +194,8 @@ public:
 	Mesh* plane;
 	Shader* fxshader;	//fbo shader
 	bool has_shot;
+	//first time play stage is called, the music will need to start
+	bool hasStarted;
 
 	HCHANNEL channel_ambient;
 	float volume_ambient;
@@ -179,12 +209,14 @@ public:
 
 	void renderGUIHealth(float window_centerx, float aspect);
 	void renderGUIWeapon(float window_centerx, float aspect);
+	void renderMiniMap(float x, float y, float sizex, float sizey, Texture* texture);
 	void saveCharacter();
 	
 	void update(double seconds_elapsed);
 	void onKeyDown(SDL_KeyboardEvent event);
 	void onKeyUp(SDL_KeyboardEvent event);
 
+	bool changeVolume(float volume);
 	void resetGame();
 };
 

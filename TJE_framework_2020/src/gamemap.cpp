@@ -218,7 +218,7 @@ bool GameMap::loadMap(const char* filename)
 
 			if (prop->index == ENEMY) {
 				//enemy_manager->createEnemy(Vector3(x, y, z), Vector3(random(5), 0, random(5)), NULL, 10, 50, 1, 0);
-				enemy_manager->createEnemy(Vector3(x, y, z), Vector3(0, 0, 0), NULL, 10, 50, 1, 0);
+				enemy_manager->createEnemy(Vector3(x, y, z), Vector3(0, 0, 0), NULL, 10, 50, 1, rot);
 			}
 			else {
 
@@ -295,6 +295,15 @@ void GameMap::saveEntity(FILE* filename, Entity* ent) {
 	Vector3 pos = ent->getPosition();
 	float scale = ent->getScaleFactor();
 	float rotation = ent->angle;
+
+	//the enemy object will be rotated 180 once is included in the enemymanager
+	//because the mesh is fliped
+	if (ent->type == ENEMY) {
+		rotation = ent->angle + 180;
+		if (rotation >= 360) {
+			rotation = abs((float)360 - rotation);
+		}
+	}
 	
 	//save to file
 	fprintf(filename, "TYPE %d ", type);
@@ -317,7 +326,7 @@ void GameMap::saveEnemies(FILE* filename, EnemyManager* enemy_manager) {
 		
 		//information of the enemy to save
 		Vector3 pos = enemy->position;
-		float rotation = enemy->angle;
+		float rotation = enemy->initial_angle;
 		float scale = 1;
 		int type = (int)enemy->prop->index;
 

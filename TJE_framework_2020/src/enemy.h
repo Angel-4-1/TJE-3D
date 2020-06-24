@@ -14,17 +14,22 @@ struct sEnemy {
 	float health;
 	float bullet_damage;
 	float angle;
+	
 	float previous_time_shot;	//las time the enemy shot a bullet
 	bool isActive;
 	bool isDead;
 	sProp* prop;
 	Skeleton result_skeleton;
 
+	//for restoring the enemies
+	float initial_angle;
+	Vector3 initial_position;
+
 	void setEnemyValues(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, float _speed, float _health, float _bullet_damage, float _angle, bool _isActive, sProp* _prop);
 	void setEnemyValues(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, float _speed, float _health, float _bullet_damage, float _angle, bool _isActive);
 };
 
-enum eDifficultyEnemy { EASY_ENEMY, MEDIUM_ENEMY, HARD_ENEMY };
+enum eDifficultyEnemy { DEFAULT_ENEMY, EASY_ENEMY, MEDIUM_ENEMY, HARD_ENEMY };
 
 class EnemyManager
 {
@@ -48,9 +53,11 @@ public:
 	Animation* animations[MAX_ANIMATIONS];
 
 	static EnemyManager* getInstance();
+	eDifficultyEnemy current_difficulty;
 
 	void initEnemies();
 	void render(float time = 0);
+	void renderSimplified(Camera* camera, float _scale);
 	void update(double seconds_elapsed);
 	void createEnemy(Vector3 _pos, Vector3 _vel, Vector3* _player_pos, float _speed, float _life, float _bullet_damage, float _angle);
 	void selectSkeleton(sEnemy* enemy, float time = 0);

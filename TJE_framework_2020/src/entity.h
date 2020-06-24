@@ -36,6 +36,8 @@ public:
 
 	eType type;
 	BoundingBox aabb;
+
+	bool isActive;
 	
 	float scale;
 
