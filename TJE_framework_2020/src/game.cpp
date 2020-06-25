@@ -97,64 +97,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	showGPUStats = false;
 
 	/*******CREATE THE WORLD*******/
-	//get instance of the scene
-	//scene = Scene::getInstance();
-	//scene->tree = new Tree();
-
-	//load the map
-	/*
-	gamemap = GameMap::getInstance();
-	
-	bool isLoaded = false;
-	isLoaded = gamemap->loadMap("data/mymap.txt");
-
-	//if the map was not loaded create a basic map
-	if (isLoaded == false) {
-		gamemap->createBasicMap();
-	}
-	*/
-
-	//create the player
-	//player = new Player(&gamemap->prototypes[(int)PLAYER], 200);
-	//scene->player = player;
-
-	//skybox for simulating the sky
-	//sky = new SkyBox();
-
-	//plane
-	//plane = new Mesh();
-	//plane->createPlane(512);	//size in units --> each pixel of the image is 1 unit in our world
-								//centered in 0,0
-	//plane_text = Texture::Get("data/plane.png");
-
-	//fbo = new FBO();
-	//fbo->create(window_width, window_height);
-
-	/*
-	scene->light = new Light();
-	scene->light->diffuse_color.set(1, 1, 1);
-	scene->light->specular_color.set(1, 1, 1);
-	scene->light->position.set(-300, 80, 420);
-	*/
-
-	//prepare bullets and the enemies
-	//bulletmanger = BulletManager::getInstance();
-	//enemymanager = EnemyManager::getInstance();
-	//enemymanager->createEnemy(Vector3(-300, 0, 400), Vector3(0, 0, 0), &player->position, 10, 50, 1, 0);
-	//enemymanager->setDifficulty(eDifficultyEnemy::EASY_ENEMY, &player->position);
-	//ch = new Character(&gamemap->prototypes[(int)CHARACTER], Vector3(-200, 0, 400), 10, &player->position);
-
-	//init stages
+	//stage responsible of loading the data
 	loading_stage = new LoadingStage();
-	//intro_stage = new IntroStage();
-	//tutorial_stage = new TutorialStage(&player->position);
-	//editor_stage = new EditorStage(plane);
-	//play_stage = new PlayStage(player, camera, &free_cam, sky, plane, ch);
-	//pause_stage = new PauseStage(play_stage);
-	//final_stage = new FinalStage(play_stage);
-	current_stage = loading_stage;
-	//current_stage = intro_stage;
-}
+	current_stage = loading_stage;}
 
 //what to do when the image has to be draw
 void Game::render(void)
@@ -230,9 +175,7 @@ void Game::changeState()
 			if (intro_stage == NULL) { intro_stage = new IntroStage(); }
 			if (tutorial_stage == NULL) { tutorial_stage = new TutorialStage(&player->position); }
 			if (editor_stage == NULL) { editor_stage = new EditorStage(plane); }
-			if (play_stage == NULL) { 
-				play_stage = new PlayStage(player, camera, &free_cam, sky, plane, ch); 
-			}
+			if (play_stage == NULL) { play_stage = new PlayStage(player, camera, &free_cam, sky, plane, ch); }
 			if (pause_stage == NULL) { pause_stage = new PauseStage(play_stage); }
 			if (final_stage == NULL) { final_stage = new FinalStage(play_stage); }
 			loading_stage->hasFinished = false;
@@ -263,10 +206,6 @@ void Game::changeState()
 			//change bars of pause according to the volume
 			if (isDone) { pause_stage->volume_bars = 2; }
 			play_stage->hasStarted = true;
-			play_stage->showMessage = true;
-			play_stage->phrase_selected = ePhrases::FIND_PHRASE;
-			play_stage->time_started_message = time;
-			//play_stage->character->reset(play_stage->generateRandomPositionCharacter(), &play_stage->player->position);
 		}
 		break;
 	case sType::PAUSE_STAGE:

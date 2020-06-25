@@ -217,8 +217,7 @@ bool GameMap::loadMap(const char* filename)
 			sProp* prop = &prototypes[type];	//prototype which contains info about its mesh, texture and shader
 
 			if (prop->index == ENEMY) {
-				//enemy_manager->createEnemy(Vector3(x, y, z), Vector3(random(5), 0, random(5)), NULL, 10, 50, 1, 0);
-				enemy_manager->createEnemy(Vector3(x, y, z), Vector3(0, 0, 0), NULL, 10, 50, 1, rot);
+				enemy_manager->createEnemy(Vector3(x, 0, z), Vector3(0, 0, 0), NULL, 10, 50, 1, rot);
 			}
 			else {
 

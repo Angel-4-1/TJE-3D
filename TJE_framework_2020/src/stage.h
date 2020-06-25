@@ -167,7 +167,6 @@ public:
 };
 
 enum eOptionPlay { NONE_PLAY, PAUSE_PLAY, FACE_PLAY, EMPTYBAR_PLAY, BAR1_PLAY, BAR2_PLAY, BAR3_PLAY, BAR4_PLAY, BAR5_PLAY, BAR6_PLAY, SHOTGUN_PLAY, REVOLVER_PLAY, MICROGUN_PLAY, GAMEOVER_PLAY, GAMEWIN_PLAY };
-enum ePhrases { NONE_PHRASE, FIND_PHRASE, GOBACK_PHRASE, SHOOT_PHRASE };
 
 class PlayStage : public Stage
 {
@@ -193,20 +192,6 @@ public:
 		{0, 0.125 * 6, 0.125, 0.125},	// microgun icon
 	};
 	Texture* texture_atlas;
-
-	//phrases that will appear during the game (hints)
-	static const int NUM_OPTIONS_PHRASES = 15;
-	float duration;
-	Vector4 menu_atlas_phrases[NUM_OPTIONS] = {
-		{0, 0, 0, 0},					// none
-		{0, 0, 1, 0.125},			// find
-		{0, 0.125, 1, 0.125},	// go back
-		{0, 0.125 * 2, 1, 0.125},	// how to shoot
-	};
-	Texture* texture_atlas_phrases;
-	ePhrases phrase_selected;
-	float time_started_message;
-	bool showMessage;
 
 	//character possible positions
 	static const int NUM_POSITIONS = 3;
@@ -245,8 +230,6 @@ public:
 	void renderGUIWeapon(float window_centerx, float aspect);
 	void renderMiniMap(float x, float y, float sizex, float sizey, Texture* texture);
 	void saveCharacter();
-	
-	void renderGUIPhrase(float window_centerx, float aspect, int phrase);
 
 	Vector3 generateRandomPositionCharacter();
 	void isWin();

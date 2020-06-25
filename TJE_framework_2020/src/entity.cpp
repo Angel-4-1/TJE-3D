@@ -219,7 +219,7 @@ void Player::selectSkeleton(float time)
 
 	float speed = velocity.length() * 0.1;
 
-	if (isHit) {
+	if (0) { //currently disabled because it does not look quite good
 		Animation* hit_reaction = animations[HIT];
 		float duration = hit_reaction->duration;
 		float time_left = Game::instance->time - when_was_hitted;
@@ -578,7 +578,7 @@ Character::Character(sProp* _prop, Vector3 _pos, float _health, Vector3* _player
 	health = _health;
 	velocity = Vector3();
 	player_position = _player_position;
-	speed = 50;
+	speed = 100;
 	model.setTranslation(position.x, position.y, position.z);
 	angle = 0;
 	isSaved = false;
@@ -599,7 +599,7 @@ void Character::reset(Vector3 _pos, Vector3* _player_position)
 	position = _pos;
 	velocity = Vector3();
 	player_position = _player_position;
-	speed = 50;
+	speed = 100;
 	model.setTranslation(position.x, position.y, position.z);
 	angle = 0;
 	isSaved = false;
@@ -693,7 +693,7 @@ void Character::update(double seconds_elapsed)
 		R.setRotation(angle * DEG2RAD, Vector3(0, 1, 0));	//yaw , rotation in degrees
 		Vector3 front = R.rotateVector(Vector3(0, 0, -1));
 		Vector3 delta = delta + front;// *speed;
-		velocity = to_target * speed * 12 * seconds_elapsed;
+		velocity = to_target * speed * 20 * seconds_elapsed;
 		float FdotT = clamp(front.dot(normalize(velocity)), -1, 1);
 		float angleFT = acos(FdotT) * RAD2DEG;
 		/*

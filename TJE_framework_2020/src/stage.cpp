@@ -141,6 +141,7 @@ void LoadingStage::render(void)
 	renderGUIPixels(initx, window_centery + 25 * aspect, finalx, window_centery + 75 * aspect, Vector4(0, 0.125, 1, 0.1), Texture::Get("data/atlas/atlasLoading.png"), Shader::Get("data/shaders/basic.vs", "data/shaders/texturegui.fs"));
 }
 
+//similar to renderGUI function but now the quad is created at position initx, inity and not its center
 void LoadingStage::renderGUIPixels(float initx, float inity, float finalx, float finaly, Vector4 range, Texture* texture, Shader* shader)
 {
 	Mesh quad;
@@ -486,7 +487,7 @@ EditorStage::EditorStage(Mesh* _plane) : Stage()
 
 void EditorStage::render(void)
 {
-	std::string text = "MODO EDITOR\nControles basicos:\nF: posicionar entitad en cursor\nU: seleccionar entidad en cursor\nG: dejar de manipular la entidad\nO: siguiente tipo\nP: tipo anterior\nL,J: mover en eje x\nI,K: mover en eje z\nN,M: mover en eje y\nY: rotar en eje y";
+	std::string text = "EDITOR MODE\nBasic controls:\nW,A,S,D: move camera\nF: place entity on cursor\nU: select entity on cursor\nG: stop manipulating the entity\nO: next type\nP: previous type\nL,J: move in x axis\nI,K: move in z axis\nN,M: move in y axis\nY: rotate in y axis";
 
 	//Render the world in a simple way
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -930,16 +931,12 @@ PlayStage::PlayStage(Player* _player, Camera* _camera, bool* _free_cam, SkyBox* 
 	plane = _plane;
 	has_shot = false;
 	hasStarted = false;
-	duration = 10;
-	showMessage = false;
-	phrase_selected = NONE_PHRASE;
 
 	fbo = new FBO();
 	fbo->create(Game::instance->window_width, Game::instance->window_height);
 
 	fxshader = Shader::Get("data/shaders/quad.vs", "data/shaders/pruebas.fs");
 	texture_atlas = Texture::Get("data/atlas/atlasPlay.png");
-	texture_atlas_phrases = Texture::Get("data/atlas/atlasPhrases.png");
 
 	audio_ambient = Audio::Get("data/audio/OutlawsFromTheWest.mp3");
 	/****ACTIVATE LOOP FLAG****/
@@ -1005,11 +1002,6 @@ void PlayStage::render(void)
 		//show number of bulllets remaining
 		if (player->hasGun) {
 			renderGUIWeapon(window_centerx, aspect);
-		}
-
-		if (0)
-		{
-			renderGUIPhrase(window_centerx, aspect, (int)phrase_selected);
 		}
 
 		glDisable(GL_BLEND);
@@ -1202,17 +1194,7 @@ void PlayStage::saveCharacter()
 	if (distanceWithCharacter <= 10.0 && distanceWithCharacter >= 0) {
 		character->isSaved = true;
 		character->angle_player = &player->angle;
-		showMessage = true;
-		phrase_selected = GOBACK_PHRASE;
-		time_started_message = *time;
 	}
-}
-
-void PlayStage::renderGUIPhrase(float window_centerx, float aspect, int phrase)
-{
-	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texturegui.fs");
-
-	renderGUI(window_centerx, 400 * aspect, 8 * 50 * aspect, 50 * aspect, menu_atlas_phrases[phrase], texture_atlas_phrases, shader);
 }
 
 void PlayStage::update(double seconds_elapsed)
@@ -1237,11 +1219,6 @@ void PlayStage::update(double seconds_elapsed)
 	if (player->health <= 0) {
 		change = true;
 		change_to = GAMEOVER_STAGE;
-	}
-
-	if (showMessage)
-	{
-		if (*time - time_started_message > duration) { showMessage = false; }
 	}
 
 	isWin();
@@ -1270,10 +1247,6 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event)
 
 				//player knockback
 				player->position = player->position - vel * 0.001;
-
-				//screen shake
-				//Camera* current = Camera::current;
-				//current->eye = current->eye - 3*Vector3(0, 1, 0);
 				
 				if (player->gun->prop->index == eType::SHOTGUN) {
 					//up right
@@ -1326,9 +1299,6 @@ void PlayStage::onKeyDown(SDL_KeyboardEvent event)
 				has_shot = true;
 			}
 			break;
-		case SDLK_6:	//render the world with an FBO
-			active_fbo = !active_fbo;
-			break;
 		case SDLK_g:
 			player->changeGun();
 			break;
@@ -1367,7 +1337,6 @@ bool PlayStage::changeVolume(float volume)
 Vector3 PlayStage::generateRandomPositionCharacter()
 {
 	int random_number = rand() % NUM_POSITIONS; // random number between [0, NUM_POSITIONS]
-	std::cout << random_number << std::endl;
 
 	//make sure that the number is between the range
 	if (random_number >= 0 && random_number < NUM_POSITIONS)
