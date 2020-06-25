@@ -37,7 +37,7 @@ private:
 	BulletManager();
 
 public:
-	static const int MAX_BULLETS = 100;
+	static const int MAX_BULLETS = 200;
 
 	eTolerance tolerance;
 

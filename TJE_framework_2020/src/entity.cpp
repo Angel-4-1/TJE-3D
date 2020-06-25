@@ -234,7 +234,6 @@ void Player::selectSkeleton(float time)
 		
 	}
 
-	//hasGun = true;
 	if (hasGun) {
 		if (speed < 1) {
 			blendSkeleton(&idle->skeleton, &shoot->skeleton, speed, &result_skeleton);
@@ -414,6 +413,31 @@ void Player::update(double seconds_elapsed)
 		}
 	}
 
+	//test with the mountains
+	if (collided == false) {
+		std::vector<Matrix44> world_mountains = Scene::getInstance()->mountain->vertices;
+		eType mountain_type = Scene::getInstance()->mountain->getType();
+		Mesh* mesh = GameMap::getInstance()->prototypes[(int)mountain_type].mesh;
+
+		for (int i = 0; i < world_mountains.size(); i++) {
+			Matrix44 tree_model = world_mountains[i];
+
+			Vector3 collision;	//point of collision
+			Vector3 collision_normal;
+
+			//test collision
+			if (mesh->testSphereCollision(tree_model, center, 1 / 3.0, collision, collision_normal) == false) {
+				continue;
+			}
+
+			Vector3 push_away = normalize(collision - center) * seconds_elapsed;
+			target = position - push_away;
+			target.y = 0;
+			collided = true;
+			break;
+		}
+	}
+
 	//update player position
 	position = target;
 
@@ -570,6 +594,18 @@ Character::Character(sProp* _prop, Vector3 _pos, float _health, Vector3* _player
 	animations[WAVING_C] = Animation::Get("data/characters/animation/waving.skanim");
 }
 
+void Character::reset(Vector3 _pos, Vector3* _player_position)
+{
+	position = _pos;
+	velocity = Vector3();
+	player_position = _player_position;
+	speed = 50;
+	model.setTranslation(position.x, position.y, position.z);
+	angle = 0;
+	isSaved = false;
+	angle_player = NULL;
+}
+
 void Character::render(float time)
 {
 	Mesh* mesh = prop->mesh;
@@ -652,7 +688,7 @@ void Character::update(double seconds_elapsed)
 	float distanceWithPlayer = position.distance(*player_position);
 	Vector3 to_target = normalize(*player_position - position);
 
-	if (distanceWithPlayer <= 300.0 && distanceWithPlayer >= 3) {
+	if (distanceWithPlayer <= 500.0 && distanceWithPlayer >= 3) {
 		Matrix44 R;
 		R.setRotation(angle * DEG2RAD, Vector3(0, 1, 0));	//yaw , rotation in degrees
 		Vector3 front = R.rotateVector(Vector3(0, 0, -1));
@@ -673,6 +709,7 @@ void Character::update(double seconds_elapsed)
 	velocity = velocity - velocity * 2.8 * seconds_elapsed;
 	position = position + velocity * seconds_elapsed;
 
+	//translate far away of the player to not disturb
 	model.setTranslation(position.x + 3, position.y, position.z + 3);
 	model.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
 }

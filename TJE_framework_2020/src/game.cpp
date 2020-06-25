@@ -53,6 +53,9 @@ bool active_fbo = false;
 BulletManager* bulletmanger = NULL;
 EnemyManager* enemymanager = NULL;
 
+//if we want to render GPU stats or not
+bool showGPUStats = false;
+
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -90,6 +93,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 		//error abriendo la tarjeta de sonido...
 		std::cout << "Error openning target sound" << std::endl;
 	}
+
+	showGPUStats = false;
 
 	/*******CREATE THE WORLD*******/
 	//get instance of the scene
@@ -161,7 +166,7 @@ void Game::render(void)
 	current_stage->render();
 	
 	//render the FPS, Draw Calls, etc
-	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+	if (showGPUStats) { drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2); }
 
 	//swap between front buffer and back buffer
 	SDL_GL_SwapWindow(this->window);
@@ -213,21 +218,25 @@ void Game::changeState()
 	switch (current_stage->change_to)
 	{
 	case sType::INTRO_STAGE:
-		/***FIRST TIME***/
-		if (intro_stage == NULL) { 
+		/***AFTER LOAD HAS FINISHED, CREATE THE STAGES***/
+		if (loading_stage->hasFinished)
+		{
 			player = loading_stage->player;
 			ch = loading_stage->ch;
 			plane = loading_stage->plane;
 			plane_text = loading_stage->plane_text;
 			sky = loading_stage->sky;
 			fbo = loading_stage->fbo;
-			intro_stage = new IntroStage(); 
+			if (intro_stage == NULL) { intro_stage = new IntroStage(); }
+			if (tutorial_stage == NULL) { tutorial_stage = new TutorialStage(&player->position); }
+			if (editor_stage == NULL) { editor_stage = new EditorStage(plane); }
+			if (play_stage == NULL) { 
+				play_stage = new PlayStage(player, camera, &free_cam, sky, plane, ch); 
+			}
+			if (pause_stage == NULL) { pause_stage = new PauseStage(play_stage); }
+			if (final_stage == NULL) { final_stage = new FinalStage(play_stage); }
+			loading_stage->hasFinished = false;
 		}
-		if (tutorial_stage == NULL) { tutorial_stage = new TutorialStage(&player->position); }
-		if (editor_stage == NULL) { editor_stage = new EditorStage(plane); }
-		if (play_stage == NULL) { play_stage = new PlayStage(player, camera, &free_cam, sky, plane, ch); }
-		if (pause_stage == NULL) { pause_stage = new PauseStage(play_stage); }
-		if (final_stage == NULL) { final_stage = new FinalStage(play_stage); }
 		/****************/
 		// If we go back to the Intro stage that means that we are going to restart the game
 		intro_stage->selected = eOptionIntro::NONE_INTRO;
@@ -254,6 +263,10 @@ void Game::changeState()
 			//change bars of pause according to the volume
 			if (isDone) { pause_stage->volume_bars = 2; }
 			play_stage->hasStarted = true;
+			play_stage->showMessage = true;
+			play_stage->phrase_selected = ePhrases::FIND_PHRASE;
+			play_stage->time_started_message = time;
+			//play_stage->character->reset(play_stage->generateRandomPositionCharacter(), &play_stage->player->position);
 		}
 		break;
 	case sType::PAUSE_STAGE:
@@ -268,6 +281,12 @@ void Game::changeState()
 	case sType::WIN_STAGE:
 		final_stage->changeWin(true);
 		current_stage = final_stage;
+
+		final_stage->ps_fxshader = final_stage->play_stage->fxshader;
+		final_stage->play_stage->active_fbo = true;
+		final_stage->play_stage->selected = eOptionPlay::GAMEWIN_PLAY;
+		final_stage->play_stage->fxshader = final_stage->fxshader;
+		free_cam = false;
 		break;
 	case sType::GAMEOVER_STAGE:
 		final_stage->changeWin(false);
@@ -306,6 +325,7 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 			break; //ESC key, kill the app
 		case SDLK_TAB: free_cam = !free_cam; break;
 		case SDLK_F1: Shader::ReloadAll(); break; 
+		case SDLK_1: showGPUStats = !showGPUStats; break;
 	}
 }
 

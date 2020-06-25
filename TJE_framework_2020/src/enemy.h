@@ -39,7 +39,7 @@ private:
 	EnemyManager();
 
 public:
-	static const int MAX_ENEMIES = 100;
+	static const int MAX_ENEMIES = 200;
 
 	//pool of enemies
 	sEnemy enemies[MAX_ENEMIES];

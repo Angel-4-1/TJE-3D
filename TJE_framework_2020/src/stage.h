@@ -15,6 +15,7 @@ public:
 	bool change;	// if true --> we want to change to another stage
 	sType change_to;	// stage to which we want to change
 	sType stage_type;
+	Audio* click;
 
 	Stage();
 
@@ -35,6 +36,8 @@ class LoadingStage : public Stage
 public:
 	int loaded;
 	float total;
+	bool hasFinished;
+
 	LoadingStage();
 
 	Player* player;
@@ -94,8 +97,10 @@ public:
 		{0, 0, 0.125 * 4, 0.125},		// easy
 		{0, 0.125, 0.125 * 4, 0.125},	// medium
 		{0, 0.125 * 2, 0.125 * 4, 0.125},	// hard
-		{0, 0.125 * 3, 0.125 * 5, 0.125},	// continue
+		{0, 0.125 * 4, 0.125 * 5, 0.125},	// continue
 	};
+
+	int phase;
 
 	Texture* texture_atlas;
 	Shader* shader;
@@ -106,6 +111,7 @@ public:
 	TutorialStage(Vector3* _player_position);
 
 	void render(void);
+	void renderDifficulties(void);
 };
 
 enum eOptionEditor { NONE_EDITOR, PLANE_EDITOR, RETURN_EDITOR, SAVE_EDITOR };
@@ -138,6 +144,10 @@ public:
 	bool isTree;
 	int tree_index_selected;	//index position of the vector containing the trees of the scene
 	
+	//selecting a mountain
+	bool isMountain;
+	int mountain_index_selected;
+
 	//to rotate entites
 	float angle = 90;
 
@@ -156,7 +166,8 @@ public:
 	void selectEntity();
 };
 
-enum eOptionPlay { NONE_PLAY, PAUSE_PLAY, FACE_PLAY, EMPTYBAR_PLAY, BAR1_PLAY, BAR2_PLAY, BAR3_PLAY, BAR4_PLAY, BAR5_PLAY, BAR6_PLAY, SHOTGUN_PLAY, REVOLVER_PLAY, MICROGUN_PLAY, GAMEOVER_PLAY };
+enum eOptionPlay { NONE_PLAY, PAUSE_PLAY, FACE_PLAY, EMPTYBAR_PLAY, BAR1_PLAY, BAR2_PLAY, BAR3_PLAY, BAR4_PLAY, BAR5_PLAY, BAR6_PLAY, SHOTGUN_PLAY, REVOLVER_PLAY, MICROGUN_PLAY, GAMEOVER_PLAY, GAMEWIN_PLAY };
+enum ePhrases { NONE_PHRASE, FIND_PHRASE, GOBACK_PHRASE, SHOOT_PHRASE };
 
 class PlayStage : public Stage
 {
@@ -182,6 +193,29 @@ public:
 		{0, 0.125 * 6, 0.125, 0.125},	// microgun icon
 	};
 	Texture* texture_atlas;
+
+	//phrases that will appear during the game (hints)
+	static const int NUM_OPTIONS_PHRASES = 15;
+	float duration;
+	Vector4 menu_atlas_phrases[NUM_OPTIONS] = {
+		{0, 0, 0, 0},					// none
+		{0, 0, 1, 0.125},			// find
+		{0, 0.125, 1, 0.125},	// go back
+		{0, 0.125 * 2, 1, 0.125},	// how to shoot
+	};
+	Texture* texture_atlas_phrases;
+	ePhrases phrase_selected;
+	float time_started_message;
+	bool showMessage;
+
+	//character possible positions
+	static const int NUM_POSITIONS = 3;
+
+	Vector3 positions_candidates[NUM_POSITIONS] = {
+		{-372, 0, -436}, //top left camp
+		{51, 0, -360},   //top middle camp
+		{435, 0, -52},   //right middle camp
+	};
 
 	Player* player;
 	Character* character;	//friend to find
@@ -212,6 +246,11 @@ public:
 	void renderMiniMap(float x, float y, float sizex, float sizey, Texture* texture);
 	void saveCharacter();
 	
+	void renderGUIPhrase(float window_centerx, float aspect, int phrase);
+
+	Vector3 generateRandomPositionCharacter();
+	void isWin();
+
 	void update(double seconds_elapsed);
 	void onKeyDown(SDL_KeyboardEvent event);
 	void onKeyUp(SDL_KeyboardEvent event);
@@ -273,6 +312,7 @@ public:
 };
 
 enum eOptionGameOver { NONE_GAMEOVER, TRYAGAIN_GAMEOVER, EXIT_GAMEOVER, TEXT_GAMEOVER };
+enum eOptionGameWin { NONE_GAMEWIN, BACK_GAMEWIN, EXIT_GAMEWIN, TEXT_GAMEWIN };
 
 class FinalStage : public Stage
 {
@@ -285,14 +325,26 @@ public:
 
 	static const int NUM_OPTIONS = 5;
 
+	//Game over screen
 	Texture* texture_atlas_gameover;
-	eOptionGameOver selected = NONE_GAMEOVER;
+	eOptionGameOver selectedG = NONE_GAMEOVER;
 
 	Vector4 menu_atlas[NUM_OPTIONS] = {
-		{0, 0, 0, 0},					// none
+		{0, 0, 0, 0},						// none
 		{0, 0, 0.125 * 3, 0.125 * 2},		// try again
-		{0, 0.125 * 2, 0.125 * 3, 0.125},		// exit
-		{0, 0.125 * 4, 1, 0.125},		// text
+		{0, 0.125 * 2, 0.125 * 3, 0.125},	// exit
+		{0, 0.125 * 4, 1, 0.125},			// text
+	};
+
+	//Game Win screen
+	Texture* texture_atlas_gamewin;
+	eOptionGameWin selectedW = NONE_GAMEWIN;
+
+	Vector4 menu_atlas_win[NUM_OPTIONS] = {
+		{0, 0, 0, 0},						// none
+		{0, 0, 0.125 * 3, 0.125 * 2},		// back to menu
+		{0, 0.125 * 2, 0.125 * 3, 0.125},	// exit
+		{0, 0.125 * 4, 1, 0.125 * 3},			// text
 	};
 
 	FinalStage(PlayStage* _playstage);

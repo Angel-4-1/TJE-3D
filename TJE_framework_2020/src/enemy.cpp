@@ -6,6 +6,7 @@
 #include "scene.h"
 #include "bulletmanager.h"
 #include "game.h"
+#include "audio.h"
 
 EnemyManager* EnemyManager::instance = NULL;
 
@@ -152,7 +153,7 @@ void EnemyManager::update(double seconds_elapsed)
 			float distanceWithPlayer = enemy->position.distance(*enemy->player_position);
 			Vector3 to_target = normalize(*enemy->player_position - enemy->position);
 
-			if (distanceWithPlayer <= 20.0 && distanceWithPlayer >= 2) {
+			if (distanceWithPlayer <= 50.0 && distanceWithPlayer >= 5) {
 				Vector3 pos = enemy->position;
 				pos.z = pos.z - 1;
 				pos.y = 2;
@@ -169,13 +170,15 @@ void EnemyManager::update(double seconds_elapsed)
 					if (time - enemy->previous_time_shot >= 0.5) {
 						enemy->previous_time_shot = time;
 						bm->createBullet(pos, to_target * 7500 * seconds_elapsed, 10.0, enemy->bullet_damage, eAuthor::ENEMY_BULLET, 1, angle);
+						Audio* shooting = Audio::Get("data/audio/microgun_shot.wav");
+						shooting->playSound(0.1);
 					}
 					//update position
 					enemy->velocity = to_target * 5;
 					enemy->position = enemy->position + enemy->velocity * seconds_elapsed;
 				}
 			}
-			else if (distanceWithPlayer <= 50.0) {
+			else if (distanceWithPlayer <= 80.0) {
 				enemy->velocity = enemy->velocity * 0.9;
 				enemy->position = enemy->position + enemy->velocity * seconds_elapsed;
 			}

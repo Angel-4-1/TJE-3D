@@ -146,6 +146,7 @@ public:
 	//float time_animation;
 
 	Character(sProp* _prop, Vector3 _pos, float _health, Vector3* _player_position);
+	void reset(Vector3 _pos, Vector3* _player_position);
 
 	void render(float time = 0);
 	void selectSkeleton(float time = 0);

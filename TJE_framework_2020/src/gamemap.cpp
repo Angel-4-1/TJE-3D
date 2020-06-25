@@ -132,7 +132,7 @@ GameMap::GameMap()
 	prototypes[(int)MICROGUN].mesh = Mesh::Get("data/weapons/microgun.OBJ");
 	prototypes[(int)MICROGUN].texture = Texture::Get("data/weapons/microgun.tga");
 
-	/*******ITEM^S*******/
+	/*******ITEMS*******/
 	prototypes[(int)HEART].index = HEART;
 	prototypes[(int)HEART].mesh = Mesh::Get("data/items/heart.OBJ");
 	prototypes[(int)HEART].texture = Texture::Get("data/items/heart.tga");
@@ -230,6 +230,9 @@ bool GameMap::loadMap(const char* filename)
 				if (ent->prop->index == TREE4) {
 					scene->tree->addTree(ent->model);
 				}
+				else if (ent->prop->index == MOUNTAIN) {
+					scene->mountain->addMountain(ent->model);
+				}
 				else {
 					scene->root.addChild(ent);
 				}
@@ -274,6 +277,14 @@ void GameMap::saveMap()
 		Matrix44 tree_model = scene->tree->vertices[i];
 		Entity* ent = new Entity(scene->tree->getType());
 		ent->model = tree_model;
+		saveEntity(fp, ent);
+	}
+
+	//save world mountains
+	for (int i = 0; i < scene->mountain->vertices.size(); i++) {
+		Matrix44 mountain_model = scene->mountain->vertices[i];
+		Entity* ent = new Entity(scene->mountain->getType());
+		ent->model = mountain_model;
 		saveEntity(fp, ent);
 	}
 
